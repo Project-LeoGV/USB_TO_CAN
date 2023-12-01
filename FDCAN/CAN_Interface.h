@@ -28,8 +28,7 @@ typedef struct{
 #define CAN_STANDARD_IDENTIFIER		0
 #define CAN_EXTENDED_IDENTIFIER		1
 
-
-void CAN_voidInit(st_CAN_RegDef_t* canx);
-void CAN_voidSendDataFrame(st_CAN_RegDef_t* canx, CAN_Frame_t* frame);
+void CAN_voidInit(st_CAN_RegDef_t* A_canx, CAN_Config_t A_config);
+void CAN_voidSendDataFrame(st_CAN_RegDef_t* A_canx, CAN_Frame_t* A_frame);
 
 #endif /* FDCAN_CAN_INTERFACE_H_ */
