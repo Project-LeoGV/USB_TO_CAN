@@ -8,13 +8,13 @@
 #ifndef FDCAN_CAN_REGISTERS_H_
 #define FDCAN_CAN_REGISTERS_H_
 
+/************************************************************************************************************************/
+/********************************************* FDCANs Peripheral Registers **********************************************/
+/************************************************************************************************************************/
+
 #define FDCAN1_BASE_ADDR				0x40006400U
 #define FDCAN2_BASE_ADDR				0x40006800U
 #define FDCAN3_BASE_ADDR				0x40006C00U
-
-#define FDCAN1_MESSAGES_SRAM_BASE_ADDR	0x4000A000U
-#define FDCAN2_MESSAGES_SRAM_BASE_ADDR	0x40004000U
-#define FDCAN3_MESSAGES_SRAM_BASE_ADDR	0x40008000U
 
 typedef struct{
 	u32 CREL;
@@ -74,6 +74,18 @@ typedef struct{
 	u32 CKDIV;
 }st_CAN_RegDef_t;
 
+#define CAN1	(st_CAN_RegDef_t *)(FDCAN1_BASE_ADDR)
+#define CAN2	(st_CAN_RegDef_t *)(FDCAN2_BASE_ADDR)
+#define CAN3	(st_CAN_RegDef_t *)(FDCAN3_BASE_ADDR)
+
+/************************************************************************************************************************/
+/************************************************* FDCANs Message RAM ***************************************************/
+/************************************************************************************************************************/
+
+#define FDCAN1_MESSAGES_SRAM_BASE_ADDR	0x4000A000U
+#define FDCAN2_MESSAGES_SRAM_BASE_ADDR	0x40004000U
+#define FDCAN3_MESSAGES_SRAM_BASE_ADDR	0x40008000U
+
 typedef struct{
 	u32 ID;
 	u32 DLC;
@@ -95,9 +107,6 @@ typedef struct{
 	CAN_TxBuffer_t TxBuffer[3];		// 3 elements  / 54 word
 }st_CAN_MSG_SRAM_t;
 
-#define CAN1	(st_CAN_RegDef_t *)(FDCAN1_BASE_ADDR)
-#define CAN2	(st_CAN_RegDef_t *)(FDCAN2_BASE_ADDR)
-#define CAN3	(st_CAN_RegDef_t *)(FDCAN3_BASE_ADDR)
 
 #define CAN1_MESSAGES		(st_CAN_MSG_SRAM_t *)(FDCAN1_MESSAGES_SRAM_BASE_ADDR)
 #define CAN2_MESSAGES		(st_CAN_MSG_SRAM_t *)(FDCAN2_MESSAGES_SRAM_BASE_ADDR)
