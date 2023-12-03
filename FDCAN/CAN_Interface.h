@@ -24,12 +24,12 @@ typedef struct{
 }CAN_Frame_t;
 
 /* RTR(Remote transmission request) */
-#define CAN_DATA_FRAME		0
-#define CAN_REMOTE_FRAME	1
+#define CAN_FRAME_DATA				0
+#define CAN_FRAME_REMOTE			1
 
 /* IDE(Identifier extension) */
-#define CAN_STANDARD_IDENTIFIER		0
-#define CAN_EXTENDED_IDENTIFIER		1
+#define CAN_FRAME_STANDARD_ID		0
+#define CAN_FRAME_EXTENDED_ID		1
 
 /************************************************************************************************************************/
 /************************************************* Functions Prototypes *************************************************/

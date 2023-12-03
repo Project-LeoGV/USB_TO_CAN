@@ -154,4 +154,60 @@ u8 CAN_u8GetReceivedMessagesCount(st_CAN_RegDef_t* A_canx, u8 A_fifox)
 	return L_result;
 }
 
+void CAN_voidSendDataFrame(st_CAN_RegDef_t* A_canx, CAN_Frame_t* A_frame)
+{
+	st_CAN_MSG_SRAM_t* L_msg;
+	if(A_canx == CAN1)
+		L_msg = CAN1_MESSAGES;
+	else if(A_canx == CAN2)
+		L_msg = CAN2_MESSAGES;
+	else if(A_canx == CAN3)
+			L_msg = CAN3_MESSAGES;
 
+	// Define the put index
+	u8 L_putIndex = (u8)((A_canx->TXFQS >> 16) & 0b11);
+
+	// write the message
+	u32 L_tmp = 0;
+	if(A_frame->ide == CAN_FRAME_EXTENDED_ID){
+		L_tmp = A_frame->id;
+		L_tmp |= (1 << 30); // XTD bit
+	}
+	else{
+		L_tmp = A_frame->id << 18;
+	}
+	if(A_frame->rtr == CAN_FRAME_REMOTE)
+		L_tmp |= (1 << 29);
+	L_msg->TxBuffer[L_putIndex]->ID = L_tmp;
+
+	L_msg->TxBuffer[L_putIndex]->DLC &= ~(1 << 23); // Don't store event
+	L_msg->TxBuffer[L_putIndex]->DLC &= ~(1 << 21); // Classic Can
+	L_msg->TxBuffer[L_putIndex]->DLC &= ~(1 << 20); // No bit rate switching
+
+	L_msg->TxBuffer[L_putIndex]->DLC |= (A_frame->dlc << 16); // write DLC
+
+	for(u8 i = 0; i < A_frame->dlc; i++)
+		L_msg->TxBuffer[L_putIndex]->data[i/4] |= (u32)(A_frame->data[i] << (i%4));
+
+	// Request Transmission
+	A_canx->TXBAR |= (1 << L_putIndex);
+
+	// Wait for transmission to be done
+	//while(! ((A_canx->TXBTO >> L_putIndex) & 1) );
+}
+
+u8 CAN_u8GetPendingMessagesCount(st_CAN_RegDef_t* A_canx)
+{
+	/* This Function doesn't return the number of pending messages
+	 * It return map for the 3 elements where
+	 * 0 means no request pending
+	 * 1 means request pending
+	 *
+	 * for example:
+	 * if element0 pending, element1 pending, element2 no pending
+	 * return value = 0b00000011
+	 * if element0 no pending, element1 pending, element2 pending
+	 * return value = 0b00000110
+	 * */
+	return (u8)(A_canx->TXBRP & 0b111);
+}

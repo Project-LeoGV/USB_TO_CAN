@@ -16,7 +16,7 @@
 #define FDCAN2_BASE_ADDR				0x40006800U
 #define FDCAN3_BASE_ADDR				0x40006C00U
 
-typedef struct{
+typedef volatile struct{
 	u32 CREL;
 	u32 ENDN;
 	u32 reserved0;
@@ -98,7 +98,7 @@ typedef struct{
 	u32 data[16];
 }CAN_TxBuffer_t;
 
-typedef struct{
+typedef volatile struct{
 	u32 standardID[28];				// 28 elements / 28 word
 	u32 extendedID[16];				// 8 elements  / 16 word
 	CAN_RxFIFO_t RxFIFO0[3];		// 3 elements  / 54 word
