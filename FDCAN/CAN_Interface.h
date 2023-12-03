@@ -43,11 +43,11 @@ void CAN_voidInit(st_CAN_RegDef_t* A_canx, CAN_RxConfig_t* A_rxConfig, CAN_TxCon
 #define CAN_RX_FIFO1		1
 void CAN_voidReceiveDataFrame(st_CAN_RegDef_t* A_canx, CAN_Frame_t* A_frame, u8 A_fifox);
 u8 CAN_u8GetReceivedMessagesCount(st_CAN_RegDef_t* A_canx, u8 A_fifox);
-u8 CAN_u8IsRxBufferFull(u8 A_fifox);
+u8 CAN_u8IsRxBufferFull(st_CAN_RegDef_t* A_canx, u8 A_fifox);
 
 // Sending functions
 void CAN_voidSendDataFrame(st_CAN_RegDef_t* A_canx, CAN_Frame_t* A_frame);
 u8 CAN_u8GetPendingMessagesCount(st_CAN_RegDef_t* A_canx);
-u8 CAN_u8IsTxBufferFull(u8 A_fifox);
+u8 CAN_u8IsTxBufferFull(st_CAN_RegDef_t* A_canx);
 
 #endif /* FDCAN_CAN_INTERFACE_H_ */

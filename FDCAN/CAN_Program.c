@@ -122,10 +122,10 @@ void CAN_voidReceiveDataFrame(st_CAN_RegDef_t* A_canx, CAN_Frame_t* A_frame, u8 
 	{
 		u8 L_getIndex = (u8)(A_canx->RXF0S & (0b11 << 8));
 
-		A_frame->id = (L_msg->RxFIFO0->ID >> 18) & (0b11111111111);
-		A_frame->dlc = (u8)((L_msg->RxFIFO0->DLC >> 16) & (0b111));
+		A_frame->id = (L_msg->RxFIFO0[L_getIndex].ID >> 18) & (0b11111111111);
+		A_frame->dlc = (u8)((L_msg->RxFIFO0[L_getIndex].DLC >> 16) & (0b111));
 		for(u8 i = 0; i < A_frame->dlc; i++)
-			A_frame->data[i] = (u8)((L_msg->RxFIFO0->data[i/4] >> 4*(i%4)) & (0xFF));
+			A_frame->data[i] = (u8)((L_msg->RxFIFO0[L_getIndex].data[i/4] >> 4*(i%4)) & (0xFF));
 
 		// Acknowledge Reading
 		A_canx->RXF0A |= L_getIndex;
@@ -134,10 +134,10 @@ void CAN_voidReceiveDataFrame(st_CAN_RegDef_t* A_canx, CAN_Frame_t* A_frame, u8 
 	{
 		u8 L_getIndex = (u8)(A_canx->RXF1S & (0b11 << 8));
 
-		A_frame->id = (L_msg->RxFIFO1->ID >> 18) & (0b11111111111);
-		A_frame->dlc = (u8)((L_msg->RxFIFO1->DLC >> 16) & (0b111));
+		A_frame->id = (L_msg->RxFIFO1[L_getIndex].ID >> 18) & (0b11111111111);
+		A_frame->dlc = (u8)((L_msg->RxFIFO1[L_getIndex].DLC >> 16) & (0b111));
 		for(u8 i = 0; i < A_frame->dlc; i++)
-			A_frame->data[i] = (u8)((L_msg->RxFIFO1->data[i/4] >> 4*(i%4)) & (0xFF));
+			A_frame->data[i] = (u8)((L_msg->RxFIFO1[L_getIndex].data[i/4] >> 4*(i%4)) & (0xFF));
 
 		// Acknowledge Reading
 		A_canx->RXF1A |= L_getIndex;
@@ -151,6 +151,16 @@ u8 CAN_u8GetReceivedMessagesCount(st_CAN_RegDef_t* A_canx, u8 A_fifox)
 		L_result = (u8)(A_canx->RXF0S & (0b11 << 0));
 	else
 		L_result = (u8)(A_canx->RXF1S & (0b11 << 0));
+	return L_result;
+}
+
+u8 CAN_u8IsRxBufferFull(st_CAN_RegDef_t* A_canx, u8 A_fifox)
+{
+	u8 L_result;
+	if(A_fifox == CAN_RX_FIFO0)
+		L_result = (A_canx->RXF0S & (1 << 24)) >> 24;
+	else
+		L_result = (A_canx->RXF1S & (1 << 24)) >> 24;
 	return L_result;
 }
 
@@ -178,16 +188,16 @@ void CAN_voidSendDataFrame(st_CAN_RegDef_t* A_canx, CAN_Frame_t* A_frame)
 	}
 	if(A_frame->rtr == CAN_FRAME_REMOTE)
 		L_tmp |= (1 << 29);
-	L_msg->TxBuffer[L_putIndex]->ID = L_tmp;
+	L_msg->TxBuffer[L_putIndex].ID = L_tmp;
 
-	L_msg->TxBuffer[L_putIndex]->DLC &= ~(1 << 23); // Don't store event
-	L_msg->TxBuffer[L_putIndex]->DLC &= ~(1 << 21); // Classic Can
-	L_msg->TxBuffer[L_putIndex]->DLC &= ~(1 << 20); // No bit rate switching
+	L_msg->TxBuffer[L_putIndex].DLC &= ~(1 << 23); // Don't store event
+	L_msg->TxBuffer[L_putIndex].DLC &= ~(1 << 21); // Classic Can
+	L_msg->TxBuffer[L_putIndex].DLC &= ~(1 << 20); // No bit rate switching
 
-	L_msg->TxBuffer[L_putIndex]->DLC |= (A_frame->dlc << 16); // write DLC
+	L_msg->TxBuffer[L_putIndex].DLC |= (A_frame->dlc << 16); // write DLC
 
 	for(u8 i = 0; i < A_frame->dlc; i++)
-		L_msg->TxBuffer[L_putIndex]->data[i/4] |= (u32)(A_frame->data[i] << (i%4));
+		L_msg->TxBuffer[L_putIndex].data[i/4] |= (u32)(A_frame->data[i] << (i%4));
 
 	// Request Transmission
 	A_canx->TXBAR |= (1 << L_putIndex);
@@ -210,4 +220,9 @@ u8 CAN_u8GetPendingMessagesCount(st_CAN_RegDef_t* A_canx)
 	 * return value = 0b00000110
 	 * */
 	return (u8)(A_canx->TXBRP & 0b111);
+}
+
+u8 CAN_u8IsTxBufferFull(st_CAN_RegDef_t* A_canx)
+{
+	return ((A_canx->TXFQS & (1 << 21)) >> 21);
 }
