@@ -7,7 +7,7 @@
 
 #include "CAN_Interface.h"
 
-void CAN_voidInit(st_CAN_RegDef_t* A_canx, CAN_Config_t* A_config)
+void CAN_voidInit(st_CAN_RegDef_t* A_canx, CAN_RxConfig_t* A_rxConfig, CAN_TxConfig_t* A_txConfig)
 {
 	st_CAN_MSG_SRAM_t* L_msg;
 	if(A_canx == CAN1)
@@ -47,10 +47,10 @@ void CAN_voidInit(st_CAN_RegDef_t* A_canx, CAN_Config_t* A_config)
 #endif
 
 	/* Receiver Configuration */
-	if(A_config->nonMatchingFrames == CAN_ACCEPT_FIFO0){
+	if(A_rxConfig->nonMatchingFrames == CAN_RX_ACCEPT_FIFO0){
 		A_canx->RXGFC &= ~(0b11 << 4);
 	}
-	else if(A_config->nonMatchingFrames == CAN_ACCEPT_FIFO1){
+	else if(A_rxConfig->nonMatchingFrames == CAN_RX_ACCEPT_FIFO1){
 		A_canx->RXGFC &= ~(0b11 << 4);
 		A_canx->RXGFC |= (1 << 4);
 	}
@@ -58,39 +58,50 @@ void CAN_voidInit(st_CAN_RegDef_t* A_canx, CAN_Config_t* A_config)
 		A_canx->RXGFC |= (0b11 << 4);
 	}
 
-	if(A_config->FIFO0_Mode == CAN_FIFO_BLOCKING)
+	if(A_rxConfig->FIFO0_Mode == CAN_RX_FIFO_BLOCKING)
 		A_canx->RXGFC &= ~(1 << 9);
 	else	// Overwrite
 		A_canx->RXGFC |= (1 << 9);
 
-	if(A_config->FIFO1_Mode == CAN_FIFO_BLOCKING)
+	if(A_rxConfig->FIFO1_Mode == CAN_RX_FIFO_BLOCKING)
 			A_canx->RXGFC &= ~(1 << 8);
 		else
 			A_canx->RXGFC |= (1 << 8);
 
 	A_canx->RXGFC &= ~(0b11111 << 16);
-	A_canx->RXGFC |= ((A_config->FIFO0_numberOfIDs + A_config->FIFO1_numberOfIDs) << 16);
+	A_canx->RXGFC |= ((A_rxConfig->FIFO0_numberOfIDs + A_rxConfig->FIFO1_numberOfIDs) << 16);
 
 	/* Store The IDs */
 	u32 L_temp;
 	u8 L_idIndex = 0;
-	for(u8 i = 0; i < A_config->FIFO0_numberOfIDs; i++){
-		L_temp = A_config->FIFO0_IDs[i];			// SID1
-		L_temp |= (A_config->FIFO0_IDs[i] << 16);	// SID2
+	for(u8 i = 0; i < A_rxConfig->FIFO0_numberOfIDs; i++){
+		L_temp = A_rxConfig->FIFO0_IDs[i];			// SID1
+		L_temp |= (A_rxConfig->FIFO0_IDs[i] << 16);	// SID2
 		L_temp |= (1 << 27);				// Store in FIFO0 (if filter matches)
 		L_temp |= (1 << 30);				// 01: Dual ID filter for SFID1 or SFID2
 
 		L_msg->standardID[L_idIndex++] = L_temp;
 	}
 
-	for(u8 i = 0; i < A_config->FIFO1_numberOfIDs; i++){
-		L_temp = A_config->FIFO1_IDs[i];			// SID1
-		L_temp |= (A_config->FIFO1_IDs[i] << 16);	// SID2
+	for(u8 i = 0; i < A_rxConfig->FIFO1_numberOfIDs; i++){
+		L_temp = A_rxConfig->FIFO1_IDs[i];			// SID1
+		L_temp |= (A_rxConfig->FIFO1_IDs[i] << 16);	// SID2
 		L_temp |= (1 << 28);				// Store in FIFO1 (if filter matches)
 		L_temp |= (1 << 30);				// 01: Dual ID filter for SFID1 or SFID2
 
 		L_msg->standardID[L_idIndex++] = L_temp;
 	}
+
+	/* Transmitter Configuration */
+	if(A_txConfig->bufferType == CAN_TX_BUFFER_FIFO)
+		A_canx->TXBC &= ~(1 << 24);
+	else // Queue FIFO
+		A_canx->TXBC |= (1 << 24);
+
+	if(A_txConfig->transmitPause == CAN_TX_PAUSE_DISABLE)
+		A_canx->CCCR &= ~(1 << 14);
+	else
+		A_canx->CCCR |= (1 << 14);
 
 	/* Exit Initialization and Enter Normal mode */
 	A_canx->CCCR &= ~(1 << 1);
@@ -143,4 +154,4 @@ u8 CAN_u8GetReceivedMessagesCount(st_CAN_RegDef_t* A_canx, u8 A_fifox)
 	return L_result;
 }
 
-void CAN_voidSendDataFrame(st_CAN_RegDef_t* A_canx, CAN_Frame_t* A_frame);
+

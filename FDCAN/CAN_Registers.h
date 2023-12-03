@@ -103,7 +103,7 @@ typedef struct{
 	u32 extendedID[16];				// 8 elements  / 16 word
 	CAN_RxFIFO_t RxFIFO0[3];		// 3 elements  / 54 word
 	CAN_RxFIFO_t RxFIFO1[3];		// 3 elements  / 54 word
-	u32 TxFIFO[6];					// 3 elements  / 6 word
+	u32 TxEvent[6];					// 3 elements  / 6 word
 	CAN_TxBuffer_t TxBuffer[3];		// 3 elements  / 54 word
 }st_CAN_MSG_SRAM_t;
 

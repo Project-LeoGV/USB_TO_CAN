@@ -36,15 +36,18 @@ typedef struct{
 /************************************************************************************************************************/
 
 // Initialization Function
-void CAN_voidInit(st_CAN_RegDef_t* A_canx, CAN_Config_t* A_config);
+void CAN_voidInit(st_CAN_RegDef_t* A_canx, CAN_RxConfig_t* A_rxConfig, CAN_TxConfig_t* A_txConfig);
 
 // Receiving functions
 #define CAN_RX_FIFO0		0
 #define CAN_RX_FIFO1		1
-u8 CAN_u8GetReceivedMessagesCount(st_CAN_RegDef_t* A_canx, u8 A_fifox);
 void CAN_voidReceiveDataFrame(st_CAN_RegDef_t* A_canx, CAN_Frame_t* A_frame, u8 A_fifox);
+u8 CAN_u8GetReceivedMessagesCount(st_CAN_RegDef_t* A_canx, u8 A_fifox);
+u8 CAN_u8IsRxBufferFull(u8 A_fifox);
 
 // Sending functions
 void CAN_voidSendDataFrame(st_CAN_RegDef_t* A_canx, CAN_Frame_t* A_frame);
+u8 CAN_u8GetPendingMessagesCount(st_CAN_RegDef_t* A_canx);
+u8 CAN_u8IsTxBufferFull(u8 A_fifox);
 
 #endif /* FDCAN_CAN_INTERFACE_H_ */

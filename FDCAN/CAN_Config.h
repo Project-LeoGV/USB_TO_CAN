@@ -9,17 +9,25 @@
 #define FDCAN_CAN_CONFIG_H_
 
 /************************************************************************************************************************/
-/*********************************************** Receiving Configuration ************************************************/
+/********************************************** Transmission Configuration **********************************************/
 /************************************************************************************************************************/
 
-/* Non Matching Frames */
-#define CAN_ACCEPT_FIFO0	0
-#define CAN_ACCEPT_FIFO1	1
-#define CAN_REJECT			2
+typedef struct{
+	u8 transmitPause;
+	u8 bufferType;
+}CAN_TxConfig_t;
 
-/* FIFO Mode */
-#define CAN_FIFO_BLOCKING	0
-#define CAN_FIFO_OVERWRITE	1
+/* Transmit Pause */
+#define CAN_TX_PAUSE_DISABLE		0
+#define CAN_TX_PAUSE_ENABLE			1
+
+/* Buffer Type */
+#define CAN_TX_BUFFER_FIFO			0
+#define CAN_TX_BUFFER_QUEUE			1
+
+/************************************************************************************************************************/
+/*********************************************** Receiving Configuration ************************************************/
+/************************************************************************************************************************/
 
 typedef struct{
 	u8 nonMatchingFrames;
@@ -29,7 +37,16 @@ typedef struct{
 	u8 FIFO1_numberOfIDs;
 	u32* FIFO0_IDs;
 	u32* FIFO1_IDs;
-}CAN_Config_t;
+}CAN_RxConfig_t;
+
+/* Non Matching Frames */
+#define CAN_RX_ACCEPT_FIFO0			0
+#define CAN_RX_ACCEPT_FIFO1			1
+#define CAN_RX_REJECT				2
+
+/* FIFO Mode */
+#define CAN_RX_FIFO_BLOCKING		0
+#define CAN_RX_FIFO_OVERWRITE		1
 
 /************************************************************************************************************************/
 /************************************************ General Configuration *************************************************/
@@ -55,8 +72,10 @@ typedef struct{
 #define CAN_EXCEPTION_ENABLE 		0
 #define CAN_EXCEPTION_DISABLE		1
 
+/************************************************************************************************************************/
+/************************************************** User Configuration **************************************************/
+/************************************************************************************************************************/
 
-/********************************************************** User Configuration **********************************************************/
 #define CAN_AUTOMATIC_TRANSMISSION	CAN_AUTOMATIC_TRANSMISSION_ENABLE
 #define CAN_FDCAN_OPERATION			CAN_FDCAN_DISABLE
 #define CAN_EDGE_FILTERING			CAN_FILTERING_DISABLE
