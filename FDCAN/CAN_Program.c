@@ -46,6 +46,32 @@ void CAN_voidInit(st_CAN_RegDef_t* A_canx, CAN_RxConfig_t* A_rxConfig, CAN_TxCon
 		A_canx->CCCR |= (1 << 12);
 #endif
 
+	/* Timing Configuration */
+	u32 L_timing = 0;
+	L_timing |= (3 << 25);		// 3 is default value for NSJW (Nominal (re)synchronization jump width)
+	// L_timing |= (0 << 16);		// 0 is the default value for NBRP (Bit rate prescaler)
+	L_timing |= (10 << 8);		// 10 is the default value for NTSEG1
+	L_timing |= (3 << 0);		// 3 is the default value for NTSEG2
+
+	/* Baud rate = 1 / total bit time
+	 * total bit time = (3 + NTSEG1 + NTSEG2) * tq
+	 * tq = (BRB + 1) * fdcan_clk
+	 *
+	 * suppose
+	 * fdcan_clk = 1/16 us (clk = 16 MHz)
+	 * we use default values for NTSEG1 and NTSEG2
+	 * then
+	 * total bit time = 16 * 1/16 * (BRB + 1)
+	 *
+	 * for 125kb  (8us)	 BRB = 8
+	 * for 250kb  (4us)  BRB = 4
+	 * for 500kb  (2us)  BRB = 2
+	 * for 1000kb (1us)  BRB = 1
+	 * */
+	L_timing |= (CAN_BAUD_RATE << 16);
+
+	A_canx->NBTP = L_timing;
+
 	/* Receiver Configuration */
 	if(A_rxConfig->nonMatchingFrames == CAN_RX_ACCEPT_FIFO0){
 		A_canx->RXGFC &= ~(0b11 << 4);

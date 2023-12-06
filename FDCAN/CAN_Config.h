@@ -52,6 +52,12 @@ typedef struct{
 /************************************************ General Configuration *************************************************/
 /************************************************************************************************************************/
 
+/* Baud Rate */
+#define CAN_BAUD_RATE_125K    		8	// 8 means that bit time = 8 us
+#define CAN_BAUD_RATE_250K    		4
+#define CAN_BAUD_RATE_500K    		2
+#define CAN_BAUD_RATE_1000K   		1
+
 /* Automatic Transmission */
 #define CAN_AUTOMATIC_TRANSMISSION_ENABLE		0
 #define CAN_AUTOMATIC_TRANSMISSION_DISABLE		1
@@ -75,7 +81,7 @@ typedef struct{
 /************************************************************************************************************************/
 /************************************************** User Configuration **************************************************/
 /************************************************************************************************************************/
-
+#define CAN_BAUD_RATE				CAN_BAUD_RATE_1000K
 #define CAN_AUTOMATIC_TRANSMISSION	CAN_AUTOMATIC_TRANSMISSION_ENABLE
 #define CAN_FDCAN_OPERATION			CAN_FDCAN_DISABLE
 #define CAN_EDGE_FILTERING			CAN_FILTERING_DISABLE
