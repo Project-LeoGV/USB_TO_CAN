@@ -19,19 +19,20 @@ void CAN_voidInit(st_CAN_RegDef_t* A_canx, CAN_RxConfig_t* A_rxConfig, CAN_TxCon
 
 	/* Enter Initialization mode */
 	A_canx->CCCR |= (1 << 0);
+	while(! ((A_canx->CCCR >> 0) & 1));  // Wait to make sure INIT bit has been written (Recommendation from reference manual)
 	A_canx->CCCR |= (1 << 1);
 
 /* Setup General Configuration */
-#if CAN_AUTOMATIC_TRANSMISSION == CAN_AUTOMATIC_TRANSMISSION_ENABLE
-		A_canx->CCCR &= ~(1 << 6);
-#else
-		A_canx->CCCR |= (1 << 6);
-#endif
-
 #if CAN_FDCAN_OPERATION == CAN_FDCAN_DISABLE
 		A_canx->CCCR &= ~(1 << 8);
 #else
 		A_canx->CCCR |= (1 << 8);
+#endif
+
+#if CAN_BIT_RATE_SWITCHING == CAN_BIT_RATE_SWITCHING_DISABLE
+		A_canx->CCCR &= ~(1 << 9);
+#else
+		A_canx->CCCR |= (1 << 9);
 #endif
 
 #if CAN_EDGE_FILTERING == CAN_FILTERING_DISABLE
@@ -44,6 +45,18 @@ void CAN_voidInit(st_CAN_RegDef_t* A_canx, CAN_RxConfig_t* A_rxConfig, CAN_TxCon
 		A_canx->CCCR &= ~(1 << 12);
 #else
 		A_canx->CCCR |= (1 << 12);
+#endif
+
+#if CAN_BUS_MONITORING == CAN_BUS_MONITORING_DISABLE
+		A_canx->CCCR &= ~(1 << 5);
+#else
+		A_canx->CCCR |= (1 << 5);
+#endif
+
+#if CAN_OPERATION_MODE == CAN_MODE_NORMAL_OPERATION
+		A_canx->CCCR &= ~(1 << 2);
+#else
+		A_canx->CCCR |= (1 << 2);
 #endif
 
 	/* Timing Configuration */
@@ -128,6 +141,11 @@ void CAN_voidInit(st_CAN_RegDef_t* A_canx, CAN_RxConfig_t* A_rxConfig, CAN_TxCon
 		A_canx->CCCR &= ~(1 << 14);
 	else
 		A_canx->CCCR |= (1 << 14);
+
+	if (A_txConfig->automaticTransmission == CAN_AUTOMATIC_TRANSMISSION_ENABLE)
+		A_canx->CCCR &= ~(1 << 6);
+	else
+		A_canx->CCCR |= (1 << 6);
 
 	/* Exit Initialization and Enter Normal mode */
 	A_canx->CCCR &= ~(1 << 1);
