@@ -7,9 +7,9 @@
 
 #include "CAN_Interface.h"
 
-void CAN_voidInit(st_CAN_RegDef_t* A_canx, CAN_RxConfig_t* A_rxConfig, CAN_TxConfig_t* A_txConfig)
+void CAN_voidInit(CAN_RegMap_t* A_canx, CAN_RxConfig_t* A_rxConfig, CAN_TxConfig_t* A_txConfig)
 {
-	st_CAN_MSG_SRAM_t* L_msg;
+	CAN_MSG_SRAM_t* L_msg;
 	if(A_canx == CAN1)
 		L_msg = CAN1_MESSAGES;
 	else if(A_canx == CAN2)
@@ -152,9 +152,9 @@ void CAN_voidInit(st_CAN_RegDef_t* A_canx, CAN_RxConfig_t* A_rxConfig, CAN_TxCon
 	A_canx->CCCR &= ~(1 << 0);
 }
 
-void CAN_voidReceiveDataFrame(st_CAN_RegDef_t* A_canx, CAN_Frame_t* A_frame, u8 A_fifox)
+void CAN_voidReceiveDataFrame(CAN_RegMap_t* A_canx, CAN_Frame_t* A_frame, u8 A_fifox)
 {
-	st_CAN_MSG_SRAM_t* L_msg;
+	CAN_MSG_SRAM_t* L_msg;
 	if(A_canx == CAN1)
 		L_msg = CAN1_MESSAGES;
 	else if(A_canx == CAN2)
@@ -188,7 +188,7 @@ void CAN_voidReceiveDataFrame(st_CAN_RegDef_t* A_canx, CAN_Frame_t* A_frame, u8 
 	}
 }
 
-u8 CAN_u8GetReceivedMessagesCount(st_CAN_RegDef_t* A_canx, u8 A_fifox)
+u8 CAN_u8GetReceivedMessagesCount(CAN_RegMap_t* A_canx, u8 A_fifox)
 {
 	u8 L_result;
 	if(A_fifox == CAN_RX_FIFO0)
@@ -198,7 +198,7 @@ u8 CAN_u8GetReceivedMessagesCount(st_CAN_RegDef_t* A_canx, u8 A_fifox)
 	return L_result;
 }
 
-u8 CAN_u8IsRxBufferFull(st_CAN_RegDef_t* A_canx, u8 A_fifox)
+u8 CAN_u8IsRxBufferFull(CAN_RegMap_t* A_canx, u8 A_fifox)
 {
 	u8 L_result;
 	if(A_fifox == CAN_RX_FIFO0)
@@ -208,9 +208,9 @@ u8 CAN_u8IsRxBufferFull(st_CAN_RegDef_t* A_canx, u8 A_fifox)
 	return L_result;
 }
 
-void CAN_voidSendDataFrame(st_CAN_RegDef_t* A_canx, CAN_Frame_t* A_frame)
+void CAN_voidSendDataFrame(CAN_RegMap_t* A_canx, CAN_Frame_t* A_frame)
 {
-	st_CAN_MSG_SRAM_t* L_msg;
+	CAN_MSG_SRAM_t* L_msg;
 	if(A_canx == CAN1)
 		L_msg = CAN1_MESSAGES;
 	else if(A_canx == CAN2)
@@ -250,7 +250,7 @@ void CAN_voidSendDataFrame(st_CAN_RegDef_t* A_canx, CAN_Frame_t* A_frame)
 	//while(! ((A_canx->TXBTO >> L_putIndex) & 1) );
 }
 
-u8 CAN_u8GetPendingMessagesCount(st_CAN_RegDef_t* A_canx)
+u8 CAN_u8GetPendingMessagesCount(CAN_RegMap_t* A_canx)
 {
 	/* This Function doesn't return the number of pending messages
 	 * It return map for the 3 elements where
@@ -266,7 +266,7 @@ u8 CAN_u8GetPendingMessagesCount(st_CAN_RegDef_t* A_canx)
 	return (u8)(A_canx->TXBRP & 0b111);
 }
 
-u8 CAN_u8IsTxBufferFull(st_CAN_RegDef_t* A_canx)
+u8 CAN_u8IsTxBufferFull(CAN_RegMap_t* A_canx)
 {
 	return ((A_canx->TXFQS & (1 << 21)) >> 21);
 }

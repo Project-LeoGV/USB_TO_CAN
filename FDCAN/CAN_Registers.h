@@ -72,11 +72,11 @@ typedef volatile struct{
 	u32 reserved6;
 
 	u32 CKDIV;
-}st_CAN_RegDef_t;
+}CAN_RegMap_t;
 
-#define CAN1	(st_CAN_RegDef_t *)(FDCAN1_BASE_ADDR)
-#define CAN2	(st_CAN_RegDef_t *)(FDCAN2_BASE_ADDR)
-#define CAN3	(st_CAN_RegDef_t *)(FDCAN3_BASE_ADDR)
+#define CAN1	(CAN_RegMap_t *)(FDCAN1_BASE_ADDR)
+#define CAN2	(CAN_RegMap_t *)(FDCAN2_BASE_ADDR)
+#define CAN3	(CAN_RegMap_t *)(FDCAN3_BASE_ADDR)
 
 /************************************************************************************************************************/
 /************************************************* FDCANs Message RAM ***************************************************/
@@ -105,11 +105,11 @@ typedef volatile struct{
 	CAN_RxFIFO_t RxFIFO1[3];		// 3 elements  / 54 word
 	u32 TxEvent[6];					// 3 elements  / 6 word
 	CAN_TxBuffer_t TxBuffer[3];		// 3 elements  / 54 word
-}st_CAN_MSG_SRAM_t;
+}CAN_MSG_SRAM_t;
 
 
-#define CAN1_MESSAGES		(st_CAN_MSG_SRAM_t *)(FDCAN1_MESSAGES_SRAM_BASE_ADDR)
-#define CAN2_MESSAGES		(st_CAN_MSG_SRAM_t *)(FDCAN2_MESSAGES_SRAM_BASE_ADDR)
-#define CAN3_MESSAGES		(st_CAN_MSG_SRAM_t *)(FDCAN3_MESSAGES_SRAM_BASE_ADDR)
+#define CAN1_MESSAGES		(CAN_MSG_SRAM_t *)(FDCAN1_MESSAGES_SRAM_BASE_ADDR)
+#define CAN2_MESSAGES		(CAN_MSG_SRAM_t *)(FDCAN2_MESSAGES_SRAM_BASE_ADDR)
+#define CAN3_MESSAGES		(CAN_MSG_SRAM_t *)(FDCAN3_MESSAGES_SRAM_BASE_ADDR)
 
 #endif /* FDCAN_CAN_REGISTERS_H_ */
