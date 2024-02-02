@@ -1,0 +1,7 @@
+../MCAL/FDCAN/CAN_Program.c:10:6:CAN_voidInit	32	static
+../MCAL/FDCAN/CAN_Program.c:159:6:CAN_voidReceiveDataFrame	32	static
+../MCAL/FDCAN/CAN_Program.c:195:4:CAN_u8GetReceivedMessagesCount	24	static
+../MCAL/FDCAN/CAN_Program.c:205:4:CAN_u8IsRxBufferFull	24	static
+../MCAL/FDCAN/CAN_Program.c:215:6:CAN_voidSendDataFrame	32	static
+../MCAL/FDCAN/CAN_Program.c:260:4:CAN_u8GetPendingMessagesCount	16	static
+../MCAL/FDCAN/CAN_Program.c:276:4:CAN_u8IsTxBufferFull	16	static

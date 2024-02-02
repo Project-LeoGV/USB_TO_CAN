@@ -1,0 +1,4 @@
+"./MCAL/FDCAN/CAN_Program.o"
+"./MCAL/GPIO/GPIO_Program.o"
+"./Src/Tx.o"
+"./Startup/startup_stm32g431rbtx.o"
