@@ -239,15 +239,17 @@ void CAN_voidSendDataFrame(CAN_RegMap_t* A_canx, CAN_Frame_t* A_frame)
 	L_msg->TxBuffer[L_putIndex].DLC &= ~(1 << 20); // No bit rate switching
 
 	L_msg->TxBuffer[L_putIndex].DLC |= (A_frame->dlc << 16); // write DLC
-
+	
+	L_msg->TxBuffer[L_putIndex].data[0] = 0;
+	L_msg->TxBuffer[L_putIndex].data[1] = 0;
 	for(u8 i = 0; i < A_frame->dlc; i++)
-		L_msg->TxBuffer[L_putIndex].data[i/4] |= (u32)(A_frame->data[i] << (i%4));
+		L_msg->TxBuffer[L_putIndex].data[i/4] |= (u32)(A_frame->data[i] << (8 * (i%4)));
 
 	// Request Transmission
 	A_canx->TXBAR |= (1 << L_putIndex);
 
 	// Wait for transmission to be done
-	//while(! ((A_canx->TXBTO >> L_putIndex) & 1) );
+	while(! ((A_canx->TXBTO >> L_putIndex) & 1) );
 }
 
 u8 CAN_u8GetPendingMessagesCount(CAN_RegMap_t* A_canx)
