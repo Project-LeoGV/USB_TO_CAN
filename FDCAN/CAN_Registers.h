@@ -82,9 +82,9 @@ typedef volatile struct{
 /************************************************* FDCANs Message RAM ***************************************************/
 /************************************************************************************************************************/
 
-#define FDCAN1_MESSAGES_SRAM_BASE_ADDR	0x4000A000U
-#define FDCAN2_MESSAGES_SRAM_BASE_ADDR	0x40004000U
-#define FDCAN3_MESSAGES_SRAM_BASE_ADDR	0x40008000U
+#define FDCAN1_MESSAGES_SRAM_BASE_ADDR	0x4000A400U
+#define FDCAN2_MESSAGES_SRAM_BASE_ADDR	0x4000A800U
+#define FDCAN3_MESSAGES_SRAM_BASE_ADDR	0x4000AC00U
 
 typedef struct{
 	u32 ID;
