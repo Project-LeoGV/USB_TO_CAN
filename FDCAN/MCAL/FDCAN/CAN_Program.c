@@ -110,6 +110,14 @@ void CAN_voidInit(CAN_RegMap_t* A_canx, CAN_RxConfig_t* A_rxConfig, CAN_TxConfig
 	A_canx->RXGFC &= ~(0b11111 << 16);
 	A_canx->RXGFC |= ((A_rxConfig->FIFO0_numberOfIDs + A_rxConfig->FIFO1_numberOfIDs) << 16);
 
+	/* Flush SRAM */
+	u32 pointer;
+	pointer = (u32)L_msg;
+	for(u8 i = 0; i < 212; i++){
+		*(u32 *)(pointer) = 0x00000000U;
+		pointer += 4;
+	}
+	
 	/* Store The IDs */
 	u32 L_temp;
 	u8 L_idIndex = 0;
@@ -240,8 +248,6 @@ void CAN_voidSendDataFrame(CAN_RegMap_t* A_canx, CAN_Frame_t* A_frame)
 
 	L_msg->TxBuffer[L_putIndex].DLC |= (A_frame->dlc << 16); // write DLC
 	
-	L_msg->TxBuffer[L_putIndex].data[0] = 0;
-	L_msg->TxBuffer[L_putIndex].data[1] = 0;
 	for(u8 i = 0; i < A_frame->dlc; i++)
 		L_msg->TxBuffer[L_putIndex].data[i/4] |= (u32)(A_frame->data[i] << (8 * (i%4)));
 
