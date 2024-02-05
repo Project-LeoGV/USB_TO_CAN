@@ -47,7 +47,7 @@ typedef volatile struct{
 	u32 RXGFC;
 	u32 XIDAM;
 	u32 HPMS;
-	u32 reserved4[8];
+	u32 reserved4;
 
 	u32 RXF0S;
 	u32 RXF0A;
