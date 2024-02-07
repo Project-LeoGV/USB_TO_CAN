@@ -14,10 +14,10 @@
 /************************************************************************************************************************/
 
 /* Baud Rate */
-#define CAN_BAUD_RATE_125K    		8	// 8 means that bit time = 8 us
-#define CAN_BAUD_RATE_250K    		4
-#define CAN_BAUD_RATE_500K    		2
-#define CAN_BAUD_RATE_1000K   		1
+#define CAN_BAUD_RATE_125K    		7	// 8 means that bit time = 8 us
+#define CAN_BAUD_RATE_250K    		3
+#define CAN_BAUD_RATE_500K    		1
+#define CAN_BAUD_RATE_1000K   		0
 
 /* FDCAN Operation  */
 #define CAN_FDCAN_DISABLE					0
@@ -46,7 +46,7 @@
 /************************************************************************************************************************/
 /************************************************** User Configuration **************************************************/
 /************************************************************************************************************************/
-#define CAN_BAUD_RATE				CAN_BAUD_RATE_1000K
+#define CAN_BAUD_RATE				CAN_BAUD_RATE_250K
 #define CAN_FDCAN_OPERATION			CAN_FDCAN_DISABLE
 #define CAN_BIT_RATE_SWITCHING		CAN_BIT_RATE_SWITCHING_DISABLE
 #define CAN_EDGE_FILTERING			CAN_FILTERING_DISABLE

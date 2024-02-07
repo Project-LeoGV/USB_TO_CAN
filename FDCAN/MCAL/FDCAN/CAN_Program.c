@@ -20,6 +20,8 @@ void CAN_voidInit(CAN_RegMap_t* A_canx, CAN_RxConfig_t* A_rxConfig, CAN_TxConfig
 	/* Enter Initialization mode */
 	A_canx->CCCR |= (1 << 0);
 	while(! ((A_canx->CCCR >> 0) & 1));  // Wait to make sure INIT bit has been written (Recommendation from reference manual)
+
+	// might configure Timeout value here
 	A_canx->CCCR |= (1 << 1);
 
 /* Setup General Configuration */
@@ -117,7 +119,7 @@ void CAN_voidInit(CAN_RegMap_t* A_canx, CAN_RxConfig_t* A_rxConfig, CAN_TxConfig
 		*(u32 *)(pointer) = 0x00000000U;
 		pointer += 4;
 	}
-	
+
 	/* Store The IDs */
 	u32 L_temp;
 	u8 L_idIndex = 0;
@@ -242,12 +244,14 @@ void CAN_voidSendDataFrame(CAN_RegMap_t* A_canx, CAN_Frame_t* A_frame)
 		L_tmp |= (1 << 29);
 	L_msg->TxBuffer[L_putIndex].ID = L_tmp;
 
+/*
 	L_msg->TxBuffer[L_putIndex].DLC &= ~(1 << 23); // Don't store event
 	L_msg->TxBuffer[L_putIndex].DLC &= ~(1 << 21); // Classic Can
 	L_msg->TxBuffer[L_putIndex].DLC &= ~(1 << 20); // No bit rate switching
+*/
 
 	L_msg->TxBuffer[L_putIndex].DLC |= (A_frame->dlc << 16); // write DLC
-	
+
 	for(u8 i = 0; i < A_frame->dlc; i++)
 		L_msg->TxBuffer[L_putIndex].data[i/4] |= (u32)(A_frame->data[i] << (8 * (i%4)));
 
@@ -255,7 +259,7 @@ void CAN_voidSendDataFrame(CAN_RegMap_t* A_canx, CAN_Frame_t* A_frame)
 	A_canx->TXBAR |= (1 << L_putIndex);
 
 	// Wait for transmission to be done
-	while(! ((A_canx->TXBTO >> L_putIndex) & 1) );
+	//while(! ((A_canx->TXBTO >> L_putIndex) & 1) );
 }
 
 u8 CAN_u8GetPendingMessagesCount(CAN_RegMap_t* A_canx)
