@@ -19,6 +19,13 @@ int main()
 	ledCfg.Pin = 13;
 	ledCfg.Port = GPIO_PORTC;
 
+	MGPIO_Config_t btnCfg;
+	btnCfg.Mode = GPIO_MODE_INPUT;
+	btnCfg.Pin = 5;
+	btnCfg.Port = GPIO_PORTA;
+	btnCfg.InputPull = GPIO_PULL_UP;
+	btnCfg.OutputType = GPIO_OT_PUSHPULL;
+
 	MGPIO_Config_t canRxCfg;
 	canRxCfg.Mode = GPIO_MODE_ALTF;
 	canRxCfg.Port = GPIO_PORTB;
@@ -48,16 +55,24 @@ int main()
 	u32 ids[2] = {0x30, 0x31};
 	rxCfg.FIFO0_IDs = ids;
 	rxCfg.FIFO1_IDs = ids;
-	rxCfg.nonMatchingFrames = CAN_RX_ACCEPT_FIFO1;
+	rxCfg.nonMatchingFrames = CAN_RX_REJECT;
 
 
-	CAN_Frame_t frame;
-	u8 d[8] = "Hello";
-	frame.data = d;
-	frame.dlc = 5;
-	frame.id = 0x09;
-	frame.ide = CAN_FRAME_STANDARD_ID;
-	frame.rtr = CAN_FRAME_DATA;
+	CAN_Frame_t ON;
+	u8 dataOn[2] = "ON";
+	ON.data = dataOn;
+	ON.dlc = 2;
+	ON.id = 0x09;
+	ON.ide = CAN_FRAME_STANDARD_ID;
+	ON.rtr = CAN_FRAME_DATA;
+
+	CAN_Frame_t OFF;
+	u8 dataOff[3] = "OFF";
+	OFF.data = dataOff;
+	OFF.dlc = 3;
+	OFF.id = 0x08;
+	OFF.ide = CAN_FRAME_STANDARD_ID;
+	OFF.rtr = CAN_FRAME_DATA;
 
 	RCC_Init();
 
@@ -65,14 +80,23 @@ int main()
 	GPIO_voidInitPin(&canRxCfg);
 
 	GPIO_voidInitPin(&ledCfg);
+	GPIO_voidInitPin(&btnCfg);
 
 	CAN_voidInit(CAN1, &rxCfg, &txCfg);
 
-	CAN_voidSendDataFrame(CAN1, &frame);
+
 	while(1)
 	{
-		CAN_voidSendDataFrame(CAN1, &frame);
-		GPIO_voidTogglePin(GPIO_PORTC, 13);
+		if(GPIO_u8GetPinData(GPIO_PORTA, 5))
+		{
+			GPIO_voidSetPinValue(GPIO_PORTC, 13, 0);
+			CAN_voidSendDataFrame(CAN1, &OFF);
+		}
+		else
+		{
+			GPIO_voidSetPinValue(GPIO_PORTC, 13, 1);
+			CAN_voidSendDataFrame(CAN1, &ON);
+		}
 		delay(500);
 	}
 }
