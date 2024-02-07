@@ -16,8 +16,8 @@ int main()
 {
 	MGPIO_Config_t ledCfg;
 	ledCfg.Mode = GPIO_MODE_OUTPUT;
-	ledCfg.Pin = 0;
-	ledCfg.Port = GPIO_PORTA;
+	ledCfg.Pin = 13;
+	ledCfg.Port = GPIO_PORTC;
 
 	MGPIO_Config_t canRxCfg;
 	canRxCfg.Mode = GPIO_MODE_ALTF;
@@ -38,7 +38,7 @@ int main()
 	CAN_TxConfig_t txCfg;
 	txCfg.transmitPause = CAN_TX_PAUSE_DISABLE;
 	txCfg.bufferType = CAN_TX_BUFFER_FIFO;
-	txCfg.automaticTransmission = CAN_AUTOMATIC_TRANSMISSION_ENABLE;
+	txCfg.automaticTransmission = CAN_AUTOMATIC_TRANSMISSION_DISABLE;
 
 	CAN_RxConfig_t rxCfg;
 	rxCfg.FIFO0_Mode = CAN_RX_FIFO_OVERWRITE;
@@ -52,9 +52,9 @@ int main()
 
 
 	CAN_Frame_t frame;
-	u8 d[8] = "Hello HI";
+	u8 d[8] = "Hello";
 	frame.data = d;
-	frame.dlc = 8;
+	frame.dlc = 5;
 	frame.id = 0x09;
 	frame.ide = CAN_FRAME_STANDARD_ID;
 	frame.rtr = CAN_FRAME_DATA;
@@ -68,10 +68,11 @@ int main()
 
 	CAN_voidInit(CAN1, &rxCfg, &txCfg);
 
+	CAN_voidSendDataFrame(CAN1, &frame);
 	while(1)
 	{
 		CAN_voidSendDataFrame(CAN1, &frame);
-		GPIO_voidTogglePin(GPIO_PORTA, 0);
+		GPIO_voidTogglePin(GPIO_PORTC, 13);
 		delay(500);
 	}
 }
@@ -82,6 +83,7 @@ void RCC_Init(void)
 
 	RCC->RCC_AHB2ENR |= (1 << 0);
 	RCC->RCC_AHB2ENR |= (1 << 1);
+	RCC->RCC_AHB2ENR |= (1 << 2);
 
 	RCC->RCC_APB1ENR1 |= (1 << 25);
 }
