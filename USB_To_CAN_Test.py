@@ -14,7 +14,15 @@ def receiveCan():
 
     # print it in the terminal
     # ser.readline().decode()
-    pass
+    msg = ser.readline().decode()
+    print("********* Received CAN Message *********")
+    print("ID = 0x" + msg[0:3])
+    print("RTR = " + msg[3])
+    print("DLC = " + msg[4])
+    print("Data[8] = {" + msg[5], end="")
+    for i in range(6, 13, 1):
+        print(", " + msg[i], end="")
+    print("}")
 
 if __name__ == "__main__":
     print("Welcome To USB")
@@ -32,5 +40,7 @@ if __name__ == "__main__":
         
         ############# Receive Ack and message if required (UpStream) ############
         Ack = ser.readline().decode()
-        if Ack == "2":
+        if Ack == "1":
+            continue
+        elif Ack == "2":
             receiveCan()
