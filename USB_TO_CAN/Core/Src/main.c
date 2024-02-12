@@ -28,25 +28,37 @@
 
 /* Global Variables */
 u32 IDs[CAN_IDS_COUNT] = {0x01, 0x02}; // Should Contain All UpStream IDs
-
+uint8_t buffer[15];
+typedef struct
+{
+	u16 msg_id;
+	u8 rtr;
+	u8 dlc;
+	u8 data[8];
+}USB_RX_t;
 /* Functions Prototypes */
 void USB_voidSendAck(u8 A_ack);
 void USB_voidSendCan(CAN_Frame_t* A_frame);
 void decimalToHex(u32 decimal, u8* hex);
+USB_RX_t Receive_USB_data(uint8_t* buffer);
+
 
 int main(void)
 {
 	// Clock System Initialize
 	RCC_voidInit();
+	RCC_voidPeripheralClockCfg(RCC_CCIPR_REG1,CLK48_Cfg);
 
 	// Enable Peripherals
 	RCC_voidPeripheralClockEnable(RCC_AHB2, RCC_GPIO_A);
 	RCC_voidPeripheralClockEnable(RCC_AHB2, RCC_GPIO_B);
 	RCC_voidPeripheralClockEnable(RCC_AHB2, RCC_GPIO_C);
 	RCC_voidPeripheralClockEnable(RCC_APB1_1, RCC_FDCAN);
+	RCC_voidPeripheralClockEnable(RCC_APB1_1, RCC_USB);
 
 	// Initialize Variables
-	CAN_TxConfig_t txConfig;
+	MGPIO_Config_t canTxPin = {.Port = GPIO_PORTB, .Pin = GPIO_PIN9, .Mode = GPIO_MODE_ALTF,.AltFunc = GPIO_AF9,.OutputSpeed = GPIO_SPEED_LOW,.OutputType = GPIO_OT_PUSHPULL};
+	CAN_TxConfig_t txConfig = {.automaticTransmission = CAN_AUTOMATIC_TRANSMISSION_DISABLE, .bufferType = CAN_TX_BUFFER_FIFO, .transmitPause = CAN_TX_PAUSE_DISABLE};
 
 	CAN_RxConfig_t rxConfig;
 	rxConfig.FIFO0_IDs = IDs;
@@ -60,16 +72,36 @@ int main(void)
 	receiveFrame.id = 0x00;
 
 	u8 receivedMsgCount = 0;
+
+
+	CAN_Frame_t transmitFrame;
+	transmitFrame.ide = CAN_FRAME_STANDARD_ID;
+
+
+
+	MGPIO_Config_t usbCfg = {.Port = GPIO_PORTB,.Pin = GPIO_PIN3,.Mode = GPIO_MODE_ALTF,.AltFunc = GPIO_AF3, .OutputType = GPIO_OT_PUSHPULL, .OutputSpeed = GPIO_SPEED_LOW};
+
 	// Initialize Peripherals
+	GPIO_voidInitPin(&usbCfg);
+	GPIO_voidInitPin(&canTxPin);
 	CAN_voidInit(CAN1, &rxConfig, &txConfig);
+
 	MX_USB_Device_Init();
 
 	while(1)
 	{
+		USB_RX_t DecodedData;
 		// Receive from USB
+		DecodedData = Receive_USB_data(&buffer);
 
 		// Send CAN Message
+		//=> check is there any data first
+		transmitFrame.id = DecodedData.msg_id;
+		transmitFrame.rtr = DecodedData.rtr;
+		transmitFrame.dlc = DecodedData.dlc;
+		transmitFrame.data = DecodedData.data;
 
+		CAN_voidSendDataFrame(CAN1, &transmitFrame);
 		// Check CAN Receive Buffer
 		receivedMsgCount = CAN_u8IsRxBufferFull(CAN1, CAN_RX_FIFO0);
 
@@ -135,7 +167,23 @@ void decimalToHex(u32 decimal, u8* hex)
 	hex[1] = h[(decimal % 256) / 16];
 	hex[0] = h[decimal / 256];
 }
+USB_RX_t Receive_USB_data(uint8_t* buffer)
+{
+	USB_RX_t Message;
+	Message.msg_id[0] = buffer[0];        //modify
+	Message.msg_id[1] = buffer[1];
+	Message.msg_id[2] = buffer[2];
 
+	Message.rtr = buffer[3];
+
+	Message.dlc = buffer[4];
+
+	for(u8 i = 0;i<8;i++)
+	{
+		Message.data[i] = buffer[5+i];
+	}
+	return Message;
+}
 
 void Error_Handler(void)
 {

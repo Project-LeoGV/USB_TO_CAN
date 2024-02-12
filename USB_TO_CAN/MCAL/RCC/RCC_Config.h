@@ -171,7 +171,7 @@
  0110: LSI clock selected
  0111: LSE clock selected
  1000: Internal HSI48 clock selected */
-#define RCC_MCO_SEL				0b0000
+#define RCC_MCO_SEL				0b1000
 /****************************************************************************/
 
 /* Micro-controller clock output prescaler
