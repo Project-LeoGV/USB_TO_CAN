@@ -1,2 +1,5 @@
-../Core/Src/main.c:29:5:main	8	static
-../Core/Src/main.c:55:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:37:5:main	48	static
+../Core/Src/main.c:88:6:USB_voidSendAck	24	static
+../Core/Src/main.c:95:6:USB_voidSendCan	32	static
+../Core/Src/main.c:115:6:decimalToHex	32	static
+../Core/Src/main.c:127:6:Error_Handler	4	static,ignoring_inline_asm
