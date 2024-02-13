@@ -26,12 +26,16 @@ void RCC_voidInit(void)
 	RCC->CSR = 0x00000000;
 	RCC->CRRCR = 0x00000000;
 
+	/*Turn HSI48 RC oscillator */
+	RCC->CRRCR |=(RCC_HSI48<<0);
+
 	/*Turn on the different clocks*/
 	RCC->CR |= (RCC_HSI_ON<<8);			//HSI Clock ON
 	RCC->CR |= (RCC_HSIKER_ON<<9);		//HSIKER Clock ON
 	RCC->CR |= (RCC_HSE_ON<<16);		//HSE Clock ON
 	RCC->CR |= (RCC_HSEBYP_ON<<18);		//HSE BYP ON
 	//RCC->CR |= (RCC_PLL_ON<<24);		//PLL Clock ON
+
 
 	/*HSI Trimming Value Adjust*/
 	RCC->ICSCR |= (RCC_HSITRIM_VAL<<24);
@@ -49,6 +53,7 @@ void RCC_voidInit(void)
 	RCC->CFGR |= (RCC_APB1_PRE<<8);
 	/*Select APB2 Prescaler*/
 	RCC->CFGR |= (RCC_APB2_PRE<<11);
+
 
 
 }

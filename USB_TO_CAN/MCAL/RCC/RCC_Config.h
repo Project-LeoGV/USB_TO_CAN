@@ -270,5 +270,10 @@
  11: PLLQ = 8 */
 #define RCC_PLLR					0b00
 /****************************************************************************/
+/*HSI48  RC oscillator  */
+/*0: HSI48OFF
+ *1: HSI48ON
+ */
+#define RCC_HSI48                     1
 
 #endif /* RCC_CONFIG_H_ */

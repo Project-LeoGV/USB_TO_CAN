@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2024 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 
 #include "main.h"
 #include "usb_device.h"
@@ -31,10 +31,10 @@ u32 IDs[CAN_IDS_COUNT] = {0x01, 0x02}; // Should Contain All UpStream IDs
 uint8_t buffer[15];
 typedef struct
 {
-	u16 msg_id;
+	u8* msg_id;
 	u8 rtr;
 	u8 dlc;
-	u8 data[8];
+	u8* data;
 }USB_RX_t;
 /* Functions Prototypes */
 void USB_voidSendAck(u8 A_ack);
@@ -79,7 +79,7 @@ int main(void)
 
 
 
-	MGPIO_Config_t usbCfg = {.Port = GPIO_PORTB,.Pin = GPIO_PIN3,.Mode = GPIO_MODE_ALTF,.AltFunc = GPIO_AF3, .OutputType = GPIO_OT_PUSHPULL, .OutputSpeed = GPIO_SPEED_LOW};
+	MGPIO_Config_t usbCfg = {.Port = GPIO_PORTB,.Pin = GPIO_PIN3,.Mode = GPIO_MODE_ALTF,.AltFunc = GPIO_AF3, .OutputType = GPIO_OT_PUSHPULL, .OutputSpeed = GPIO_SPEED_LOW,.InputPull=GPIO_NO_PULL};
 
 	// Initialize Peripherals
 	GPIO_voidInitPin(&usbCfg);
@@ -92,14 +92,19 @@ int main(void)
 	{
 		USB_RX_t DecodedData;
 		// Receive from USB
-		DecodedData = Receive_USB_data(&buffer);
+		DecodedData = Receive_USB_data(buffer);
 
 		// Send CAN Message
-		//=> check is there any data first
-		transmitFrame.id = DecodedData.msg_id;
+		//if both msg_id and rtr contain '0' then there is no data
+		if(DecodedData.msg_id[0] == '0' && DecodedData.msg_id[1] == '0' && DecodedData.msg_id[2] == '0' && DecodedData.rtr == '0' )
+		{
+
+		}else{
+		transmitFrame.id = (u32)&DecodedData.msg_id;
 		transmitFrame.rtr = DecodedData.rtr;
 		transmitFrame.dlc = DecodedData.dlc;
 		transmitFrame.data = DecodedData.data;
+		}
 
 		CAN_voidSendDataFrame(CAN1, &transmitFrame);
 		// Check CAN Receive Buffer
@@ -160,9 +165,9 @@ void USB_voidSendCan(CAN_Frame_t* A_frame)
 void decimalToHex(u32 decimal, u8* hex)
 {
 	u8 h[16] = {'0', '1', '2', '3', '4',
-				'5', '6', '7', '8', '9',
-				'A', 'B', 'C', 'D', 'E',
-				'F'};
+			'5', '6', '7', '8', '9',
+			'A', 'B', 'C', 'D', 'E',
+			'F'};
 	hex[2] = h[decimal % 16];
 	hex[1] = h[(decimal % 256) / 16];
 	hex[0] = h[decimal / 256];
@@ -170,7 +175,8 @@ void decimalToHex(u32 decimal, u8* hex)
 USB_RX_t Receive_USB_data(uint8_t* buffer)
 {
 	USB_RX_t Message;
-	Message.msg_id[0] = buffer[0];        //modify
+
+	Message.msg_id[0] = buffer[0];
 	Message.msg_id[1] = buffer[1];
 	Message.msg_id[2] = buffer[2];
 
@@ -187,11 +193,11 @@ USB_RX_t Receive_USB_data(uint8_t* buffer)
 
 void Error_Handler(void)
 {
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
-  /* USER CODE END Error_Handler_Debug */
+	/* USER CODE BEGIN Error_Handler_Debug */
+	/* User can add his own implementation to report the HAL error return state */
+	__disable_irq();
+	while (1)
+	{
+	}
+	/* USER CODE END Error_Handler_Debug */
 }
