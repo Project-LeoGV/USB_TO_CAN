@@ -6,7 +6,19 @@ def sendCan():
 
     # Send it via USB
     # ser.write(value.encode('ascii'))
-    pass
+    print("Enter ID consists of three bits\n")
+    ID   = input("ID: 0x")
+    RTR  = input("RTR: ")
+    DLC  = input("DLC: ")
+    DATA =""
+    for i in range(1,int(DLC)+1,1):
+        Data = input("Data[{}]: ".format(i))
+        DATA += Data
+
+    msg = ID +RTR +DLC +DATA 
+    msg = msg.ljust(13,'0') + '\n'
+    
+    ser.write(msg.encode('ascii'))
 
 def receiveCan():
     # Take can Message comes from USB,
@@ -35,7 +47,6 @@ if __name__ == "__main__":
 
     while True:
         ##################### Send CAN Message (DownStream) #####################
-        value = input()
         sendCan()
         
         ############# Receive Ack and message if required (UpStream) ############
