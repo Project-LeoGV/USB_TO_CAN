@@ -28,20 +28,21 @@
 
 /* Global Variables */
 u32 IDs[CAN_IDS_COUNT] = {0x01, 0x02}; // Should Contain All UpStream IDs
-uint8_t buffer[15];
+uint8_t buffer[14] = "0010219024700\n";
 typedef struct
 {
-	u8* msg_id;
+	u32 msg_id;
 	u8 rtr;
 	u8 dlc;
-	u8* data;
+	u8 data[8];
 }USB_RX_t;
+
 /* Functions Prototypes */
 void USB_voidSendAck(u8 A_ack);
 void USB_voidSendCan(CAN_Frame_t* A_frame);
 void decimalToHex(u32 decimal, u8* hex);
-USB_RX_t Receive_USB_data(uint8_t* buffer);
-
+void  Receive_USB_data(uint8_t* buffer,USB_RX_t *A_xDecoded_data);
+u32 hexstr_to_Hex(u8 *A_u8str);
 
 int main(void)
 {
@@ -59,6 +60,7 @@ int main(void)
 	// Initialize Variables
 	MGPIO_Config_t canTxPin = {.Port = GPIO_PORTB, .Pin = GPIO_PIN9, .Mode = GPIO_MODE_ALTF,.AltFunc = GPIO_AF9,.OutputSpeed = GPIO_SPEED_LOW,.OutputType = GPIO_OT_PUSHPULL};
 	CAN_TxConfig_t txConfig = {.automaticTransmission = CAN_AUTOMATIC_TRANSMISSION_DISABLE, .bufferType = CAN_TX_BUFFER_FIFO, .transmitPause = CAN_TX_PAUSE_DISABLE};
+	MGPIO_Config_t usbCfg = {.Port = GPIO_PORTB,.Pin = GPIO_PIN3,.Mode = GPIO_MODE_ALTF,.AltFunc = GPIO_AF3, .OutputType = GPIO_OT_PUSHPULL, .OutputSpeed = GPIO_SPEED_LOW,.InputPull=GPIO_NO_PULL};
 
 	CAN_RxConfig_t rxConfig;
 	rxConfig.FIFO0_IDs = IDs;
@@ -79,8 +81,6 @@ int main(void)
 
 
 
-	MGPIO_Config_t usbCfg = {.Port = GPIO_PORTB,.Pin = GPIO_PIN3,.Mode = GPIO_MODE_ALTF,.AltFunc = GPIO_AF3, .OutputType = GPIO_OT_PUSHPULL, .OutputSpeed = GPIO_SPEED_LOW,.InputPull=GPIO_NO_PULL};
-
 	// Initialize Peripherals
 	GPIO_voidInitPin(&usbCfg);
 	GPIO_voidInitPin(&canTxPin);
@@ -92,21 +92,23 @@ int main(void)
 	{
 		USB_RX_t DecodedData;
 		// Receive from USB
-		DecodedData = Receive_USB_data(buffer);
+		Receive_USB_data(buffer,&DecodedData);
 
 		// Send CAN Message
-		//if both msg_id and rtr contain '0' then there is no data
-		if(DecodedData.msg_id[0] == '0' && DecodedData.msg_id[1] == '0' && DecodedData.msg_id[2] == '0' && DecodedData.rtr == '0' )
+		//if msg_id contains address 0x000 and rtr contains 0 then there is no data
+		if(DecodedData.msg_id == 0x000 && DecodedData.rtr == 0 )
 		{
 
 		}else{
-		transmitFrame.id = (u32)&DecodedData.msg_id;
-		transmitFrame.rtr = DecodedData.rtr;
-		transmitFrame.dlc = DecodedData.dlc;
-		transmitFrame.data = DecodedData.data;
+			transmitFrame.id   = DecodedData.msg_id;
+			transmitFrame.rtr  = DecodedData.rtr;
+			transmitFrame.dlc  = DecodedData.dlc;
+			transmitFrame.data = DecodedData.data;
+
+			CAN_voidSendDataFrame(CAN1, &transmitFrame);
 		}
 
-		CAN_voidSendDataFrame(CAN1, &transmitFrame);
+
 		// Check CAN Receive Buffer
 		receivedMsgCount = CAN_u8IsRxBufferFull(CAN1, CAN_RX_FIFO0);
 
@@ -172,25 +174,39 @@ void decimalToHex(u32 decimal, u8* hex)
 	hex[1] = h[(decimal % 256) / 16];
 	hex[0] = h[decimal / 256];
 }
-USB_RX_t Receive_USB_data(uint8_t* buffer)
+void  Receive_USB_data(uint8_t* buffer,USB_RX_t *A_xDecoded_data)
 {
-	USB_RX_t Message;
+	u8 hex_str[3];
+	hex_str[0] = buffer[0] ;
+	hex_str[1] = buffer[1] ;
+	hex_str[2] = buffer[2] ;
 
-	Message.msg_id[0] = buffer[0];
-	Message.msg_id[1] = buffer[1];
-	Message.msg_id[2] = buffer[2];
+	A_xDecoded_data->msg_id = hexstr_to_Hex(hex_str);
 
-	Message.rtr = buffer[3];
+	A_xDecoded_data->rtr = buffer[3] - '0';
 
-	Message.dlc = buffer[4];
+	A_xDecoded_data->dlc = buffer[4] - '0';
 
-	for(u8 i = 0;i<8;i++)
-	{
-		Message.data[i] = buffer[5+i];
+	for (u8 i = 0; i < A_xDecoded_data->dlc; i++) {
+		A_xDecoded_data->data[i] = buffer[5 + i];
 	}
-	return Message;
-}
 
+}
+u32 hexstr_to_Hex(u8 *A_u8str)
+{
+	u32 hex = 0;
+	for(u8 i = 0; i<3; i++)
+	{
+		if(A_u8str[i]>='0' && A_u8str[i]<= '9')
+		{
+			hex = hex *16 +  (A_u8str[i]-'0');
+		}else if(A_u8str[i]>='A' && A_u8str[i]<= 'F')
+		{
+			hex = hex *16 +  (A_u8str[i]-'A' + 10);
+		}
+	}
+	return hex;
+}
 void Error_Handler(void)
 {
 	/* USER CODE BEGIN Error_Handler_Debug */

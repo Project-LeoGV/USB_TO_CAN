@@ -18,6 +18,7 @@
 void RCC_voidInit(void)
 {
 	/*Clear All Registers To Avoid Errors*/
+
 	RCC->CR = 0x00000000;
 	RCC->ICSCR = 0x00000000;
 	RCC->CFGR = 0x00000000;
