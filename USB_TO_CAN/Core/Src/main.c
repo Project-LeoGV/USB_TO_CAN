@@ -141,6 +141,7 @@ int main(void)
 			sameMsg = 1;
 			for(u8 i = 0; i < DecodedData.dlc; i++){
 				if(previousData.data[i] != DecodedData.data[i]){
+
 					sameMsg = 0;
 					break;
 				}
