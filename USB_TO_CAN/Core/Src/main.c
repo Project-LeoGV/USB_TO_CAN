@@ -28,7 +28,7 @@
 
 /* Global Variables */
 u32 IDs[CAN_IDS_COUNT] = {0x01, 0x02}; // Should Contain All UpStream IDs
-uint8_t buffer[14] = "0010219024700\n";
+uint8_t buffer[14] = "0000219024700\n";
 typedef struct
 {
 	u32 msg_id;
@@ -44,21 +44,37 @@ void decimalToHex(u32 decimal, u8* hex);
 void  Receive_USB_data(uint8_t* buffer,USB_RX_t *A_xDecoded_data);
 u32 hexstr_to_Hex(u8 *A_u8str);
 
+void RCC_Init(void)
+{
+	RCC->CCIPR |= (1 << 25);
+	RCC->AHB2ENR |= (1 << 0);
+	RCC->AHB2ENR |= (1 << 1);
+	RCC->AHB2ENR |= (1 << 2);
+
+	RCC->APB1ENR1 |= (1 << 25);
+}
+
 int main(void)
 {
 	// Clock System Initialize
 	RCC_voidInit();
-	RCC_voidPeripheralClockCfg(RCC_CCIPR_REG1,CLK48_Cfg);
+	//RCC_voidPeripheralClockCfg(RCC_CCIPR_REG1, FDCAN_Cfg);
+	RCC->CCIPR |= (1 << 25);
 
 	// Enable Peripherals
 	RCC_voidPeripheralClockEnable(RCC_AHB2, RCC_GPIO_A);
 	RCC_voidPeripheralClockEnable(RCC_AHB2, RCC_GPIO_B);
 	RCC_voidPeripheralClockEnable(RCC_AHB2, RCC_GPIO_C);
 	RCC_voidPeripheralClockEnable(RCC_APB1_1, RCC_FDCAN);
+
+	//RCC_Init();
+	RCC_voidPeripheralClockCfg(RCC_CCIPR_REG1,CLK48_Cfg);
 	RCC_voidPeripheralClockEnable(RCC_APB1_1, RCC_USB);
 
 	// Initialize Variables
 	MGPIO_Config_t canTxPin = {.Port = GPIO_PORTB, .Pin = GPIO_PIN9, .Mode = GPIO_MODE_ALTF,.AltFunc = GPIO_AF9,.OutputSpeed = GPIO_SPEED_LOW,.OutputType = GPIO_OT_PUSHPULL};
+	MGPIO_Config_t canRxPin = {.Port = GPIO_PORTB, .Pin = GPIO_PIN8, .Mode = GPIO_MODE_ALTF,.AltFunc = GPIO_AF9,.OutputSpeed = GPIO_SPEED_LOW,.OutputType = GPIO_OT_PUSHPULL};
+
 	CAN_TxConfig_t txConfig = {.automaticTransmission = CAN_AUTOMATIC_TRANSMISSION_DISABLE, .bufferType = CAN_TX_BUFFER_FIFO, .transmitPause = CAN_TX_PAUSE_DISABLE};
 	MGPIO_Config_t usbCfg = {.Port = GPIO_PORTB,.Pin = GPIO_PIN3,.Mode = GPIO_MODE_ALTF,.AltFunc = GPIO_AF3, .OutputType = GPIO_OT_PUSHPULL, .OutputSpeed = GPIO_SPEED_LOW,.InputPull=GPIO_NO_PULL};
 
@@ -67,6 +83,16 @@ int main(void)
 	rxConfig.FIFO0_numberOfIDs = CAN_IDS_COUNT;
 	rxConfig.FIFO0_Mode = CAN_RX_FIFO_OVERWRITE;
 	rxConfig.nonMatchingFrames = CAN_RX_ACCEPT_FIFO1;
+
+	CAN_RxConfig_t rxCfg;
+		rxCfg.FIFO0_Mode = CAN_RX_FIFO_OVERWRITE;
+		rxCfg.FIFO1_Mode = CAN_RX_FIFO_OVERWRITE;
+		rxCfg.FIFO0_numberOfIDs = 2;
+		rxCfg.FIFO1_numberOfIDs = 2;
+		u32 ids[2] = {0x30, 0x31};
+		rxCfg.FIFO0_IDs = ids;
+		rxCfg.FIFO1_IDs = ids;
+		rxCfg.nonMatchingFrames = CAN_RX_REJECT;
 
 	CAN_Frame_t receiveFrame;
 	u8 receiveData[8];
@@ -82,14 +108,23 @@ int main(void)
 
 
 	// Initialize Peripherals
-	GPIO_voidInitPin(&usbCfg);
+	//GPIO_voidInitPin(&usbCfg);
 	GPIO_voidInitPin(&canTxPin);
-	CAN_voidInit(CAN1, &rxConfig, &txConfig);
+	GPIO_voidInitPin(&canRxPin);
+	CAN_voidInit(CAN1, &rxCfg, &txConfig);
 
 	MX_USB_Device_Init();
 
+	u8 d[8] = "0123456\n";
+	transmitFrame.ide = CAN_FRAME_STANDARD_ID;
+	transmitFrame.id = 0x000;
+	transmitFrame.rtr = CAN_FRAME_DATA;
+	transmitFrame.dlc = 8;
+	transmitFrame.data = d;
+	CAN_voidSendDataFrame(CAN1, &transmitFrame);
 	while(1)
 	{
+
 		USB_RX_t DecodedData;
 		// Receive from USB
 		Receive_USB_data(buffer,&DecodedData);
@@ -128,7 +163,7 @@ void USB_voidSendAck(u8 A_ack)
 {
 	u8 msg[5] = "0000\n";
 	msg[3] = '0' + A_ack;
-	CDC_Transmit_FS(msg, 4);
+	CDC_Transmit_FS(msg, 5);
 }
 
 void USB_voidSendCan(CAN_Frame_t* A_frame)
