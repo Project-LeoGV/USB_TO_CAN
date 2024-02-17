@@ -122,25 +122,50 @@ int main(void)
 	transmitFrame.dlc = 8;
 	transmitFrame.data = d;
 	CAN_voidSendDataFrame(CAN1, &transmitFrame);
+
+	USB_RX_t DecodedData, previousData;
+	u8 sameMsg;
 	while(1)
 	{
 
-		USB_RX_t DecodedData;
+
 		// Receive from USB
 		Receive_USB_data(buffer,&DecodedData);
+
+		sameMsg = 0;
+
+		if(previousData.msg_id == DecodedData.msg_id
+		&& previousData.rtr == DecodedData.rtr
+		&& previousData.dlc == DecodedData.dlc
+		){
+			sameMsg = 1;
+			for(u8 i = 0; i < DecodedData.dlc; i++){
+				if(previousData.data[i] != DecodedData.data[i]){
+					sameMsg = 0;
+					break;
+				}
+			}
+		}
 
 		// Send CAN Message
 		//if msg_id contains address 0x000 and rtr contains 0 then there is no data
 		if(DecodedData.msg_id == 0x000 && DecodedData.rtr == 0 )
 		{
 
-		}else{
+		}
+		else if(sameMsg == 0){
 			transmitFrame.id   = DecodedData.msg_id;
 			transmitFrame.rtr  = DecodedData.rtr;
 			transmitFrame.dlc  = DecodedData.dlc;
 			transmitFrame.data = DecodedData.data;
 
 			CAN_voidSendDataFrame(CAN1, &transmitFrame);
+			previousData.msg_id = DecodedData.msg_id;
+			previousData.rtr = DecodedData.rtr;
+			previousData.dlc = DecodedData.dlc;
+			for(u8 i = 0; i < DecodedData.dlc; i++){
+				previousData.data[i] = DecodedData.data[i];
+			}
 		}
 
 
