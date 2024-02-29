@@ -176,17 +176,19 @@ void CAN_voidReceiveDataFrame(CAN_RegMap_t* A_canx, CAN_Frame_t* A_frame, u8 A_f
 	{
 		u8 L_getIndex = (u8)((A_canx->RXF0S & (0b11 << 8)) >> 8);
 
-		A_frame->id = (L_msg->RxFIFO0[L_getIndex].ID >> 18) & (0b11111111111);
-		A_frame->dlc = (u8)((L_msg->RxFIFO0[L_getIndex].DLC >> 16) & (0b1111));
-		for(u8 i = 0; i < A_frame->dlc; i++){
-			A_frame->data[i] = ((L_msg->RxFIFO0[L_getIndex].data[i/4] >> (8*(i%4))) & (0xFF));
-		}
+		A_frame->ide = ((L_msg->RxFIFO0[L_getIndex].ID >> 30) & 1);
+		A_frame->rtr = ((L_msg->RxFIFO0[L_getIndex].ID >> 29) & 1);
 
-		for(u8 i = 0; i < 3; i++){
-			L_msg->RxFIFO0[i].ID = 0;
-			L_msg->RxFIFO0[i].DLC = 0;
-			for(u8 j = 0; j < 8; j++)
-				L_msg->RxFIFO0[i].data[j] = 0;
+		if(A_frame->ide == CAN_FRAME_STANDARD_ID)
+			A_frame->id = (L_msg->RxFIFO0[L_getIndex].ID >> 18) & (0b11111111111);
+		else
+			A_frame->id = L_msg->RxFIFO0[L_getIndex].ID & (0x1FFFFFFF);
+
+		if(A_frame->rtr == CAN_FRAME_DATA)
+		{
+			A_frame->dlc = (u8)((L_msg->RxFIFO0[L_getIndex].DLC >> 16) & (0b1111));
+			for(u8 i = 0; i < A_frame->dlc; i++)
+				A_frame->data[i] = ((L_msg->RxFIFO0[L_getIndex].data[i/4] >> (8*(i%4))) & (0xFF));
 		}
 
 		// Acknowledge Reading
@@ -194,12 +196,22 @@ void CAN_voidReceiveDataFrame(CAN_RegMap_t* A_canx, CAN_Frame_t* A_frame, u8 A_f
 	}
 	else
 	{
-		u8 L_getIndex = (u8)(A_canx->RXF1S & (0b11 << 8));
+		u8 L_getIndex = (u8)((A_canx->RXF1S & (0b11 << 8)) >> 8);
 
-		A_frame->id = (L_msg->RxFIFO1[L_getIndex].ID >> 18) & (0b11111111111);
-		A_frame->dlc = (u8)((L_msg->RxFIFO1[L_getIndex].DLC >> 16) & (0b111));
-		for(u8 i = 0; i < A_frame->dlc; i++)
-			A_frame->data[i] = (u8)((L_msg->RxFIFO1[L_getIndex].data[i/4] >> 4*(i%4)) & (0xFF));
+		A_frame->ide = ((L_msg->RxFIFO1[L_getIndex].ID >> 30) & 1);
+		A_frame->rtr = ((L_msg->RxFIFO1[L_getIndex].ID >> 29) & 1);
+
+		if(A_frame->ide == CAN_FRAME_STANDARD_ID)
+			A_frame->id = (L_msg->RxFIFO1[L_getIndex].ID >> 18) & (0b11111111111);
+		else
+			A_frame->id = L_msg->RxFIFO1[L_getIndex].ID & (0x1FFFFFFF);
+
+		if(A_frame->rtr == CAN_FRAME_DATA)
+		{
+			A_frame->dlc = (u8)((L_msg->RxFIFO1[L_getIndex].DLC >> 16) & (0b1111));
+			for(u8 i = 0; i < A_frame->dlc; i++)
+				A_frame->data[i] = ((L_msg->RxFIFO1[L_getIndex].data[i/4] >> (8*(i%4))) & (0xFF));
+		}
 
 		// Acknowledge Reading
 		A_canx->RXF1A |= (1 << L_getIndex);
