@@ -36,20 +36,20 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h \
- ../Core/Inc/../../MCAL/RCC/RCC_Interface.h \
- ../Core/Inc/../../MCAL/RCC/../../LIB/BIT_MATH.h \
- ../Core/Inc/../../MCAL/RCC/../../LIB/STD_TYPES.h \
- ../Core/Inc/../../MCAL/RCC/RCC_Config.h \
- ../Core/Inc/../../MCAL/RCC/RCC_Registers.h \
- ../Core/Inc/../../MCAL/GPIO/GPIO_Interface.h \
- ../Core/Inc/../../MCAL/GPIO/../../LIB/STD_TYPES.h \
- ../Core/Inc/../../MCAL/GPIO/../../LIB/BIT_MATH.h \
- ../Core/Inc/../../MCAL/GPIO/GPIO_Registers.h \
- ../Core/Inc/../../MCAL/GPIO/GPIO_Config.h \
- ../Core/Inc/../../MCAL/FDCAN/CAN_Interface.h \
- ../Core/Inc/../../MCAL/FDCAN/../../LIB/STD_TYPES.h \
- ../Core/Inc/../../MCAL/FDCAN/CAN_Registers.h \
- ../Core/Inc/../../MCAL/FDCAN/CAN_Config.h
+ ../Core/Src/../../MCAL/RCC/RCC_Interface.h \
+ ../Core/Src/../../MCAL/RCC/../../LIB/BIT_MATH.h \
+ ../Core/Src/../../MCAL/RCC/../../LIB/STD_TYPES.h \
+ ../Core/Src/../../MCAL/RCC/RCC_Config.h \
+ ../Core/Src/../../MCAL/RCC/RCC_Registers.h \
+ ../Core/Src/../../MCAL/GPIO/GPIO_Interface.h \
+ ../Core/Src/../../MCAL/GPIO/../../LIB/STD_TYPES.h \
+ ../Core/Src/../../MCAL/GPIO/../../LIB/BIT_MATH.h \
+ ../Core/Src/../../MCAL/GPIO/GPIO_Registers.h \
+ ../Core/Src/../../MCAL/GPIO/GPIO_Config.h \
+ ../Core/Src/../../MCAL/FDCAN/CAN_Interface.h \
+ ../Core/Src/../../MCAL/FDCAN/../../LIB/STD_TYPES.h \
+ ../Core/Src/../../MCAL/FDCAN/CAN_Registers.h \
+ ../Core/Src/../../MCAL/FDCAN/CAN_Config.h
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
@@ -89,17 +89,17 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h:
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h:
-../Core/Inc/../../MCAL/RCC/RCC_Interface.h:
-../Core/Inc/../../MCAL/RCC/../../LIB/BIT_MATH.h:
-../Core/Inc/../../MCAL/RCC/../../LIB/STD_TYPES.h:
-../Core/Inc/../../MCAL/RCC/RCC_Config.h:
-../Core/Inc/../../MCAL/RCC/RCC_Registers.h:
-../Core/Inc/../../MCAL/GPIO/GPIO_Interface.h:
-../Core/Inc/../../MCAL/GPIO/../../LIB/STD_TYPES.h:
-../Core/Inc/../../MCAL/GPIO/../../LIB/BIT_MATH.h:
-../Core/Inc/../../MCAL/GPIO/GPIO_Registers.h:
-../Core/Inc/../../MCAL/GPIO/GPIO_Config.h:
-../Core/Inc/../../MCAL/FDCAN/CAN_Interface.h:
-../Core/Inc/../../MCAL/FDCAN/../../LIB/STD_TYPES.h:
-../Core/Inc/../../MCAL/FDCAN/CAN_Registers.h:
-../Core/Inc/../../MCAL/FDCAN/CAN_Config.h:
+../Core/Src/../../MCAL/RCC/RCC_Interface.h:
+../Core/Src/../../MCAL/RCC/../../LIB/BIT_MATH.h:
+../Core/Src/../../MCAL/RCC/../../LIB/STD_TYPES.h:
+../Core/Src/../../MCAL/RCC/RCC_Config.h:
+../Core/Src/../../MCAL/RCC/RCC_Registers.h:
+../Core/Src/../../MCAL/GPIO/GPIO_Interface.h:
+../Core/Src/../../MCAL/GPIO/../../LIB/STD_TYPES.h:
+../Core/Src/../../MCAL/GPIO/../../LIB/BIT_MATH.h:
+../Core/Src/../../MCAL/GPIO/GPIO_Registers.h:
+../Core/Src/../../MCAL/GPIO/GPIO_Config.h:
+../Core/Src/../../MCAL/FDCAN/CAN_Interface.h:
+../Core/Src/../../MCAL/FDCAN/../../LIB/STD_TYPES.h:
+../Core/Src/../../MCAL/FDCAN/CAN_Registers.h:
+../Core/Src/../../MCAL/FDCAN/CAN_Config.h:

@@ -22,37 +22,47 @@
 #ifndef __MAIN_H
 #define __MAIN_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+/* Includes ------------------------------------------------------------------*/
 #include "stm32g4xx_hal.h"
-#include "usb_device.h"
-#include "usbd_cdc_if.h"
-#include "../../MCAL/RCC/RCC_Interface.h"
-#include "../../MCAL/GPIO/GPIO_Interface.h"
-#include "../../MCAL/FDCAN/CAN_Interface.h"
 
-/* MACROS */
-#define CAN_IDS_COUNT		2 // To be edited later
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
 
-typedef struct
-{
-	u32 msg_id;
-	u8 rtr;
-	u8 dlc;
-	u8 data[8];
-}USB_RX_t;
+/* USER CODE END Includes */
 
-/* Functions Prototypes */
-void APP_voidSystemClockInit(void);
-void APP_voidCanInit(void);
+/* Exported types ------------------------------------------------------------*/
+/* USER CODE BEGIN ET */
 
-u8 APP_u8SameMessage(USB_RX_t* A_previous, USB_RX_t* A_current);
-void APP_voidSendAckUSB(u8 A_ack);
-void APP_voidSendDataUSB(CAN_Frame_t* A_frame);
-void APP_voidReceiveDataUSB(uint8_t* buffer, USB_RX_t *A_xDecoded_data);
+/* USER CODE END ET */
 
-void APP_voidDecimalToHex(u32 decimal, u8* hex);
-u32 APP_u32StringToHex(u8 *A_u8str);
+/* Exported constants --------------------------------------------------------*/
+/* USER CODE BEGIN EC */
 
+/* USER CODE END EC */
+
+/* Exported macro ------------------------------------------------------------*/
+/* USER CODE BEGIN EM */
+
+/* USER CODE END EM */
+
+/* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
+
+/* USER CODE BEGIN EFP */
+
+/* USER CODE END EFP */
+
+/* Private defines -----------------------------------------------------------*/
+/* USER CODE BEGIN Private defines */
+
+/* USER CODE END Private defines */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __MAIN_H */
