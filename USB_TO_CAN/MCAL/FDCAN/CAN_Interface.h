@@ -22,7 +22,7 @@ typedef struct{
 	u8 dlc;		// Data length code
 	u8 rtr;		// Remote transmission request
 	u8 ide; 	// Identifier extension
-	u8* data;
+	u8 data[8];
 }CAN_Frame_t;
 
 /* RTR(Remote transmission request) */
