@@ -177,9 +177,17 @@ void CAN_voidReceiveDataFrame(CAN_RegMap_t* A_canx, CAN_Frame_t* A_frame, u8 A_f
 		u8 L_getIndex = (u8)((A_canx->RXF0S & (0b11 << 8)) >> 8);
 
 		A_frame->id = (L_msg->RxFIFO0[L_getIndex].ID >> 18) & (0b11111111111);
-		A_frame->dlc = (u8)((L_msg->RxFIFO0[L_getIndex].DLC >> 16) & (0b111));
-		for(u8 i = 0; i < A_frame->dlc; i++)
-			A_frame->data[i] = (u8)((L_msg->RxFIFO0[L_getIndex].data[i/4] >> 4*(i%4)) & (0xFF));
+		A_frame->dlc = (u8)((L_msg->RxFIFO0[L_getIndex].DLC >> 16) & (0b1111));
+		for(u8 i = 0; i < A_frame->dlc; i++){
+			A_frame->data[i] = ((L_msg->RxFIFO0[L_getIndex].data[i/4] >> (8*(i%4))) & (0xFF));
+		}
+
+		for(u8 i = 0; i < 3; i++){
+			L_msg->RxFIFO0[i].ID = 0;
+			L_msg->RxFIFO0[i].DLC = 0;
+			for(u8 j = 0; j < 8; j++)
+				L_msg->RxFIFO0[i].data[j] = 0;
+		}
 
 		// Acknowledge Reading
 		A_canx->RXF0A = L_getIndex;
