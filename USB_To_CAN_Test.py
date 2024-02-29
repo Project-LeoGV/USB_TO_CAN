@@ -11,9 +11,10 @@ def sendCan():
     RTR  = input("RTR: ")
     DLC  = input("DLC: ")
     DATA =""
-    for i in range(1,int(DLC)+1,1):
-        Data = input("Data[{}]: ".format(i))
-        DATA += Data
+    if int(RTR) == 0:
+        for i in range(1,int(DLC)+1,1):
+            Data = input("Data[{}]: ".format(i))
+            DATA += Data
 
     msg = ID +RTR +DLC +DATA 
     msg = msg.ljust(13,'0') + '\n'
@@ -51,7 +52,14 @@ if __name__ == "__main__":
         
         ############# Receive Ack and message if required (UpStream) ############
         Ack = ser.readline().decode()
-        if Ack == "1":
+        if Ack == "0001\n":
+            print("Sending...")
             continue
-        elif Ack == "2":
+
+        elif Ack == "0002\n":
+            print("Recciving...")
             receiveCan()
+
+            
+            
+            
