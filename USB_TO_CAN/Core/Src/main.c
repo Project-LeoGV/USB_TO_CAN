@@ -18,10 +18,10 @@
 
 #include "main.h"
 
-#define CAN_DEBUG_USING_LED 	0
+#define CAN_DEBUG_USING_LED 	1
 
 /* Global Variables */
-u32 IDs[CAN_IDS_COUNT] = {0x01, 0x02}; // Should Contain All UpStream IDs
+u32 IDs[CAN_IDS_COUNT] = {0x01, 0x02, 0x003, 0x008, 0x009, 0x00A, 0x00F}; // Should Contain All UpStream IDs
 uint8_t buffer[14] = "0000000000000\n";
 
 #if CAN_DEBUG_USING_LED
@@ -69,11 +69,11 @@ int main(void)
 
 #if CAN_DEBUG_USING_LED
 	delay(1000);
-	GPIO_voidTogglePin(GPIO_PORTC, 13);
+	GPIO_voidSetPinValue(GPIO_PORTC, 13, 1);
 	delay(1000);
 #endif
 
-	CAN_voidSendDataFrame(CAN1, &transmitFrame);
+	//CAN_voidSendDataFrame(CAN1, &transmitFrame);
 	while(1)
 	{
 		// Receive from USB
@@ -92,6 +92,7 @@ int main(void)
 			for(u8 i = 0; i < transmitFrame.dlc; i++)
 				transmitFrame.data[i] = currentMessage.data[i];
 
+/*
 #if CAN_DEBUG_USING_LED
 			for(u8 i = 0; i < currentMessage.dlc; i++)
 			{
@@ -101,6 +102,7 @@ int main(void)
 				}
 			}
 #endif
+*/
 
 			CAN_voidSendDataFrame(CAN1, &transmitFrame);
 
@@ -110,20 +112,36 @@ int main(void)
 			previousMessage.dlc = currentMessage.dlc;
 			for(u8 i = 0; i < currentMessage.dlc; i++)
 				previousMessage.data[i] = currentMessage.data[i];
+
+			delay(50);
+			// Check CAN Receive Buffer
+			receivedMsgCount = CAN_u8GetReceivedMessagesCount(CAN1, CAN_RX_FIFO0);
+
+			// Send USB Acknowledge (Containing whether we will send or receive)
+			if(receivedMsgCount == 0){
+				APP_voidSendAckUSB(1);
+				GPIO_voidSetPinValue(GPIO_PORTC, 13, 1);
+			}
+			else{
+				APP_voidSendAckUSB(2);
+				GPIO_voidSetPinValue(GPIO_PORTC, 13, 0);
+				CAN_voidReceiveDataFrame(CAN1, &receiveFrame, CAN_RX_FIFO0);
+				APP_voidSendDataUSB(&receiveFrame);
+			}
+
 		}
 
-		/*// Check CAN Receive Buffer
-		receivedMsgCount = CAN_u8IsRxBufferFull(CAN1, CAN_RX_FIFO0);
+		delay(50);
+		// Check CAN Receive Buffer
+		receivedMsgCount = CAN_u8GetReceivedMessagesCount(CAN1, CAN_RX_FIFO0);
 
 		// Send USB Acknowledge (Containing whether we will send or receive)
-		if(receivedMsgCount == 0){
-			APP_voidSendAckUSB(1);
-		}
-		else{
+		if(receivedMsgCount != 0){
 			APP_voidSendAckUSB(2);
+			GPIO_voidSetPinValue(GPIO_PORTC, 13, 0);
 			CAN_voidReceiveDataFrame(CAN1, &receiveFrame, CAN_RX_FIFO0);
 			APP_voidSendDataUSB(&receiveFrame);
-		}*/
+		}
 	}
 }
 
@@ -156,11 +174,10 @@ void APP_voidCanInit(void)
 	CAN_RxConfig_t rxCfg;
 	rxCfg.FIFO0_Mode = CAN_RX_FIFO_OVERWRITE;
 	rxCfg.FIFO1_Mode = CAN_RX_FIFO_OVERWRITE;
-	rxCfg.FIFO0_numberOfIDs = 2;
-	rxCfg.FIFO1_numberOfIDs = 2;
-	u32 ids[2] = {0x30, 0x31};
-	rxCfg.FIFO0_IDs = ids;
-	rxCfg.FIFO1_IDs = ids;
+	rxCfg.FIFO0_numberOfIDs = CAN_IDS_COUNT;
+	rxCfg.FIFO1_numberOfIDs = 0;
+	rxCfg.FIFO0_IDs = IDs;
+	rxCfg.FIFO1_IDs = NULL;
 	rxCfg.nonMatchingFrames = CAN_RX_REJECT;
 
 	GPIO_voidInitPin(&canTxPin);
@@ -217,7 +234,7 @@ void APP_voidSendDataUSB(CAN_Frame_t* A_frame)
 	u8 i = 0;
 	for(i = 0; i < 8; i++){
 		if(i < A_frame->dlc)
-			msg[5 + i] = '0' + A_frame->data[i];
+			msg[5 + i] = A_frame->data[i];
 		else
 			msg[5 + i] = '0';
 	}
