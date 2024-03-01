@@ -11,6 +11,7 @@ RM := rm -rf
 -include sources.mk
 -include Startup/subdir.mk
 -include Src/subdir.mk
+-include MCAL/RCC/subdir.mk
 -include MCAL/GPIO/subdir.mk
 -include MCAL/FDCAN/subdir.mk
 -include objects.mk

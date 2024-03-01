@@ -260,8 +260,10 @@ void CAN_voidSendDataFrame(CAN_RegMap_t* A_canx, CAN_Frame_t* A_frame)
 	else{
 		L_tmp = A_frame->id << 18;
 	}
-	if(A_frame->rtr == CAN_FRAME_REMOTE)
+	if(A_frame->rtr == CAN_FRAME_REMOTE){
 		L_tmp |= (1 << 29);
+		A_frame->dlc = 0;
+	}
 	L_msg->TxBuffer[L_putIndex].ID = L_tmp;
 
 /*
@@ -272,8 +274,17 @@ void CAN_voidSendDataFrame(CAN_RegMap_t* A_canx, CAN_Frame_t* A_frame)
 
 	L_msg->TxBuffer[L_putIndex].DLC = (A_frame->dlc << 16); // write DLC
 
+	u32 data0 = 0;
+	u32 data1 = 0;
 	for(u8 i = 0; i < A_frame->dlc; i++)
-		L_msg->TxBuffer[L_putIndex].data[i/4] |= (u32)(A_frame->data[i] << (8 * (i%4)));
+	{
+		 if(i < 4)
+			 data0 |= (u32)(A_frame->data[i] << (8 * (i%4)));
+		 else
+			 data1 |= (u32)(A_frame->data[i] << (8 * (i%4)));
+	}
+	L_msg->TxBuffer[L_putIndex].data[0] = data0;
+	L_msg->TxBuffer[L_putIndex].data[1] = data1;
 
 	// Request Transmission
 	A_canx->TXBAR |= (1 << L_putIndex);

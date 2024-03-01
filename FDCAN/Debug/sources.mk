@@ -25,6 +25,7 @@ OBJCOPY_BIN :=
 SUBDIRS := \
 MCAL/FDCAN \
 MCAL/GPIO \
+MCAL/RCC \
 Src \
 Startup \
 

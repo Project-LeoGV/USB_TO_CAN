@@ -50,18 +50,27 @@ int main()
 	CAN_RxConfig_t rxCfg;
 	rxCfg.FIFO0_Mode = CAN_RX_FIFO_OVERWRITE;
 	rxCfg.FIFO1_Mode = CAN_RX_FIFO_OVERWRITE;
-	rxCfg.FIFO0_numberOfIDs = 2;
-	rxCfg.FIFO1_numberOfIDs = 2;
-	u32 ids[2] = {0x08, 0x09};
+	rxCfg.FIFO0_numberOfIDs = 5;
+	rxCfg.FIFO1_numberOfIDs = 5;
+	u32 ids[5] = {0x08, 0x09, 0x0A, 0x0F, 0x10};
 	rxCfg.FIFO0_IDs = ids;
 	rxCfg.FIFO1_IDs = ids;
 	rxCfg.nonMatchingFrames = CAN_RX_REJECT;
 
 
 	CAN_Frame_t frame;
-	u8 data[8];
+	frame.id = 0;
 	frame.dlc = 0;
-	frame.data = data;
+	frame.rtr = 0;
+	frame.ide = CAN_FRAME_STANDARD_ID;
+	frame.data[0] = '0';
+	frame.data[1] = '1';
+	frame.data[2] = '2';
+	frame.data[3] = '3';
+	frame.data[4] = '4';
+	frame.data[5] = '5';
+	frame.data[6] = '6';
+	frame.data[7] = '\n';
 
 	RCC_Init();
 
@@ -80,13 +89,10 @@ int main()
 		if(count != 0)
 		{
 			CAN_voidReceiveDataFrame(CAN1, &frame, CAN_RX_FIFO0);
-			if(frame.dlc == 2)
-				GPIO_voidSetPinValue(GPIO_PORTC, 13, 1);
-			else
-				GPIO_voidSetPinValue(GPIO_PORTC, 13, 0);
+			//delay(100);
+			//CAN_voidSendDataFrame(CAN1, &frame);
 		}
-
-		delay(500);
+		//delay(500);
 	}
 }
 

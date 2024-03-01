@@ -59,16 +59,17 @@ int main()
 
 
 	CAN_Frame_t ON;
-	u8 dataOn[2] = "ON";
-	ON.data = dataOn;
+	ON.data[0] = 'O';
+	ON.data[1] = 'N';
 	ON.dlc = 2;
 	ON.id = 0x09;
 	ON.ide = CAN_FRAME_STANDARD_ID;
 	ON.rtr = CAN_FRAME_DATA;
 
 	CAN_Frame_t OFF;
-	u8 dataOff[3] = "OFF";
-	OFF.data = dataOff;
+	ON.data[0] = 'M';
+	ON.data[1] = 'A';
+	ON.data[2] = 'O';
 	OFF.dlc = 3;
 	OFF.id = 0x08;
 	OFF.ide = CAN_FRAME_STANDARD_ID;
@@ -87,7 +88,7 @@ int main()
 
 	while(1)
 	{
-		if(GPIO_u8GetPinData(GPIO_PORTA, 5))
+		/*if(GPIO_u8GetPinData(GPIO_PORTA, 5))
 		{
 			GPIO_voidSetPinValue(GPIO_PORTC, 13, 0);
 			CAN_voidSendDataFrame(CAN1, &OFF);
@@ -96,7 +97,12 @@ int main()
 		{
 			GPIO_voidSetPinValue(GPIO_PORTC, 13, 1);
 			CAN_voidSendDataFrame(CAN1, &ON);
-		}
+		}*/
+		CAN_voidSendDataFrame(CAN1, &ON);
+		delay(500);
+		CAN_voidSendDataFrame(CAN1, &OFF);
+		delay(500);
+		CAN_voidSendDataFrame(CAN1, &ON);
 		delay(500);
 	}
 }
