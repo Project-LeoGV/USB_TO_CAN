@@ -72,14 +72,17 @@ int main()
 	Frame[3].rtr = CAN_FRAME_REMOTE;
 
 	CAN_Frame_t receiveFrame;
+	CAN_Frame_t transmitFrame;
+	transmitFrame.ide = CAN_FRAME_STANDARD_ID;
+	transmitFrame.rtr = CAN_FRAME_DATA;
+
 
 	GPIO_voidSetPinValue(GPIO_PORTA, 3, 1);
 	GPIO_voidSetPinValue(GPIO_PORTA, 9, 1);
 	GPIO_voidSetPinValue(GPIO_PORTA, 10, 1);
 	GPIO_voidSetPinValue(GPIO_PORTC, 13, 1);
 
-	u8 leds[3] = {9, 10, 3};
-	u8 matched = 0;
+	u8 ledState[3] = {0, 0, 0};
 	while(1)
 	{
 
@@ -87,26 +90,86 @@ int main()
 		{
 			CAN_voidReceiveDataFrame(CAN1, &receiveFrame, CAN_RX_FIFO0);
 
-			for(u8 i = 0; i < 3; i++)
+			if(receiveFrame.rtr == CAN_FRAME_REMOTE)
 			{
-				if(receiveFrame.id == Frame[i].id
-				&& receiveFrame.dlc == Frame[i].dlc
-				&& receiveFrame.rtr == Frame[i].rtr
+				transmitFrame.id = receiveFrame.id;
+
+				u8 state;
+				if(receiveFrame.id == 0x009)
+					state = ledState[0];
+				else if(receiveFrame.id == 0x00A)
+					state = ledState[1];
+				else if(receiveFrame.id == 0x003)
+					state = ledState[2];
+				else
+					state = 5;
+
+				if(state == 0){
+					transmitFrame.dlc = 3;
+					transmitFrame.data[0] = 'O';
+					transmitFrame.data[1] = 'F';
+					transmitFrame.data[2] = 'F';
+				}
+				else if(state == 1){
+					transmitFrame.dlc = 2;
+					transmitFrame.data[0] = 'O';
+					transmitFrame.data[1] = 'N';
+				}
+				else if(state == 5){
+					transmitFrame.dlc = 5;
+					transmitFrame.data[0] = 'e';
+					transmitFrame.data[1] = 'r';
+					transmitFrame.data[2] = 'r';
+					transmitFrame.data[3] = 'o';
+					transmitFrame.data[4] = 'r';
+				}
+
+				CAN_voidSendDataFrame(CAN1, &transmitFrame);
+			}
+			else
+			{
+				if(receiveFrame.dlc >= 6
+				&& 	receiveFrame.data[0] == 't'
+				&& 	receiveFrame.data[1] == 'u'
+				&& 	receiveFrame.data[2] == 'r'
+				&& 	receiveFrame.data[3] == 'n'
+				&& 	receiveFrame.data[4] == 'O'
 				)
 				{
-					matched = 1;
-					for(u8 j = 0; j < Frame[i].dlc; j++){
-						if(receiveFrame.data[j] != Frame[i].data[j]){
-							matched = 0;
-							break;
+					if(receiveFrame.dlc == 6 && receiveFrame.data[5] == 'N')
+					{
+						if(receiveFrame.id == 0x009){
+							ledState[0] = 1;
+							GPIO_voidSetPinValue(GPIO_PORTA, 9, 0);
+						}
+						else if(receiveFrame.id == 0x00A){
+							ledState[1] = 1;
+							GPIO_voidSetPinValue(GPIO_PORTA, 10, 0);
+						}
+						else if(receiveFrame.id == 0x003){
+							ledState[2] = 1;
+							GPIO_voidSetPinValue(GPIO_PORTA, 3, 0);
 						}
 					}
-					if(matched){
-						GPIO_voidTogglePin(GPIO_PORTA, leds[i]);
-						break;
+					else if(receiveFrame.dlc == 7 && receiveFrame.data[5] == 'F' && receiveFrame.data[6] == 'F')
+					{
+						if(receiveFrame.id == 0x009){
+							ledState[0] = 0;
+							GPIO_voidSetPinValue(GPIO_PORTA, 9, 1);
+						}
+						else if(receiveFrame.id == 0x00A){
+							ledState[1] = 0;
+							GPIO_voidSetPinValue(GPIO_PORTA, 10, 1);
+						}
+						else if(receiveFrame.id == 0x003){
+							ledState[2] = 0;
+							GPIO_voidSetPinValue(GPIO_PORTA, 3, 1);
+						}
 					}
+
 				}
 			}
+
 		}
 	}
 }
@@ -141,9 +204,9 @@ void APP_voidCanInit(void)
 	CAN_RxConfig_t rxCfg;
 	rxCfg.FIFO0_Mode = CAN_RX_FIFO_OVERWRITE;
 	rxCfg.FIFO1_Mode = CAN_RX_FIFO_OVERWRITE;
-	rxCfg.FIFO0_numberOfIDs = 3;
+	rxCfg.FIFO0_numberOfIDs = 4;
 	rxCfg.FIFO1_numberOfIDs = 0;
-	u32 ids[3] = {0x008, 0x009, 0x00F};
+	u32 ids[4] = {0x003, 0x009, 0x00A, 0x00F};
 	rxCfg.FIFO0_IDs = ids;
 	rxCfg.FIFO1_IDs = NULL;
 	rxCfg.nonMatchingFrames = CAN_RX_REJECT;
