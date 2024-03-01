@@ -18,9 +18,19 @@
 
 #include "main.h"
 
+#define CAN_DEBUG_USING_LED 	0
+
 /* Global Variables */
 u32 IDs[CAN_IDS_COUNT] = {0x01, 0x02}; // Should Contain All UpStream IDs
 uint8_t buffer[14] = "0000000000000\n";
+
+#if CAN_DEBUG_USING_LED
+void delay(u32 ms)
+{
+	for(u32 i = 0; i < ms; i++)
+		for(u32 j = 0; j < 1080; j++);
+}
+#endif
 
 int main(void)
 {
@@ -28,6 +38,8 @@ int main(void)
 	APP_voidSystemClockInit();
 
 	// Initialize Peripherals
+	MGPIO_Config_t PC13 = {.Port = GPIO_PORTC, .Pin = GPIO_PIN13, .Mode = GPIO_MODE_OUTPUT,.AltFunc = GPIO_AF9,.OutputSpeed = GPIO_SPEED_LOW,.OutputType = GPIO_OT_PUSHPULL};
+	GPIO_voidInitPin(&PC13);
 	APP_voidCanInit();
 	MX_USB_Device_Init();
 
@@ -54,8 +66,14 @@ int main(void)
 	transmitFrame.id = 0x000;
 	transmitFrame.rtr = CAN_FRAME_DATA;
 	transmitFrame.dlc = 8;
-	CAN_voidSendDataFrame(CAN1, &transmitFrame);
 
+#if CAN_DEBUG_USING_LED
+	delay(1000);
+	GPIO_voidTogglePin(GPIO_PORTC, 13);
+	delay(1000);
+#endif
+
+	CAN_voidSendDataFrame(CAN1, &transmitFrame);
 	while(1)
 	{
 		// Receive from USB
@@ -71,8 +89,19 @@ int main(void)
 			transmitFrame.id   = currentMessage.msg_id;
 			transmitFrame.rtr  = currentMessage.rtr;
 			transmitFrame.dlc  = currentMessage.dlc;
-			for(u8 i = 0; i < 8; i++)
+			for(u8 i = 0; i < transmitFrame.dlc; i++)
 				transmitFrame.data[i] = currentMessage.data[i];
+
+#if CAN_DEBUG_USING_LED
+			for(u8 i = 0; i < currentMessage.dlc; i++)
+			{
+				if(currentMessage.data[i] == '5'){
+					GPIO_voidTogglePin(GPIO_PORTC, 13);
+					delay(100);
+				}
+			}
+#endif
+
 			CAN_voidSendDataFrame(CAN1, &transmitFrame);
 
 			// Update previous message
@@ -83,7 +112,7 @@ int main(void)
 				previousMessage.data[i] = currentMessage.data[i];
 		}
 
-		// Check CAN Receive Buffer
+		/*// Check CAN Receive Buffer
 		receivedMsgCount = CAN_u8IsRxBufferFull(CAN1, CAN_RX_FIFO0);
 
 		// Send USB Acknowledge (Containing whether we will send or receive)
@@ -94,7 +123,7 @@ int main(void)
 			APP_voidSendAckUSB(2);
 			CAN_voidReceiveDataFrame(CAN1, &receiveFrame, CAN_RX_FIFO0);
 			APP_voidSendDataUSB(&receiveFrame);
-		}
+		}*/
 	}
 }
 
@@ -202,6 +231,8 @@ void APP_voidSendDataUSB(CAN_Frame_t* A_frame)
 
 void APP_voidReceiveDataUSB(uint8_t* buffer, USB_RX_t *A_xDecoded_data)
 {
+	u32 len = 14;
+	CDC_Receive_FS(buffer, &len);
 	u8 hex_str[3];
 	hex_str[0] = buffer[0] ;
 	hex_str[1] = buffer[1] ;
@@ -248,11 +279,11 @@ u32 APP_u32StringToHex(u8 *A_u8str)
 
 void Error_Handler(void)
 {
-	/* USER CODE BEGIN Error_Handler_Debug */
+	/* USER CODE BEGIN Error_Handler_CAN_DEBUG_USING_LED */
 	/* User can add his own implementation to report the HAL error return state */
 	__disable_irq();
 	while (1)
 	{
 	}
-	/* USER CODE END Error_Handler_Debug */
+	/* USER CODE END Error_Handler_DEBUG */
 }
