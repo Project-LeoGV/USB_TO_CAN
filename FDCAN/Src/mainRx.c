@@ -81,7 +81,7 @@ int main()
 	GPIO_voidSetPinValue(GPIO_PORTA, 9, 1);
 	GPIO_voidSetPinValue(GPIO_PORTA, 10, 1);
 	GPIO_voidSetPinValue(GPIO_PORTC, 13, 1);
-
+	u8 counter = 0;
 	u8 ledState[3] = {0, 0, 0};
 	while(1)
 	{
@@ -101,9 +101,10 @@ int main()
 					state = ledState[1];
 				else if(receiveFrame.id == 0x003)
 					state = ledState[2];
-				else
+				else{
 					state = 5;
-
+					counter++;
+				}
 				if(state == 0){
 					transmitFrame.dlc = 3;
 					transmitFrame.data[0] = 'O';
@@ -116,12 +117,16 @@ int main()
 					transmitFrame.data[1] = 'N';
 				}
 				else if(state == 5){
-					transmitFrame.dlc = 5;
-					transmitFrame.data[0] = 'e';
-					transmitFrame.data[1] = 'r';
-					transmitFrame.data[2] = 'r';
-					transmitFrame.data[3] = 'o';
-					transmitFrame.data[4] = 'r';
+					if(counter < 10){
+						transmitFrame.dlc = 1;
+						transmitFrame.data[0] = '0' + counter;
+					}
+					else{
+						transmitFrame.dlc = 2;
+						transmitFrame.data[0] = '0' + (counter/10);
+						transmitFrame.data[1] = '0' + (counter%10);
+					}
+
 				}
 
 				CAN_voidSendDataFrame(CAN1, &transmitFrame);

@@ -5,47 +5,47 @@ Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
   0 .isr_vector   000001d8  08000000  08000000  00010000  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  1 .text         000012d8  080001d8  080001d8  000101d8  2**2
+  1 .text         00001328  080001d8  080001d8  000101d8  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .rodata       00000014  080014b0  080014b0  000114b0  2**2
+  2 .rodata       00000014  08001500  08001500  00011500  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  3 .ARM.extab    00000000  080014c4  080014c4  000114cc  2**0
+  3 .ARM.extab    00000000  08001514  08001514  0001151c  2**0
                   CONTENTS
-  4 .ARM          00000000  080014c4  080014c4  000114cc  2**0
+  4 .ARM          00000000  08001514  08001514  0001151c  2**0
                   CONTENTS
-  5 .preinit_array 00000000  080014c4  080014cc  000114cc  2**0
+  5 .preinit_array 00000000  08001514  0800151c  0001151c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  6 .init_array   00000004  080014c4  080014c4  000114c4  2**2
+  6 .init_array   00000004  08001514  08001514  00011514  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  7 .fini_array   00000004  080014c8  080014c8  000114c8  2**2
+  7 .fini_array   00000004  08001518  08001518  00011518  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  8 .data         00000000  20000000  20000000  000114cc  2**0
+  8 .data         00000000  20000000  20000000  0001151c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  9 .ccmsram      00000000  10000000  10000000  000114cc  2**0
+  9 .ccmsram      00000000  10000000  10000000  0001151c  2**0
                   CONTENTS
  10 .bss          0000001c  20000000  20000000  00020000  2**2
                   ALLOC
  11 ._user_heap_stack 00000604  2000001c  2000001c  00020000  2**0
                   ALLOC
- 12 .ARM.attributes 00000030  00000000  00000000  000114cc  2**0
+ 12 .ARM.attributes 00000030  00000000  00000000  0001151c  2**0
                   CONTENTS, READONLY
- 13 .debug_info   00001ea5  00000000  00000000  000114fc  2**0
+ 13 .debug_info   00001eb4  00000000  00000000  0001154c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_abbrev 000005b6  00000000  00000000  000133a1  2**0
+ 14 .debug_abbrev 000005b6  00000000  00000000  00013400  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_aranges 00000178  00000000  00000000  00013958  2**3
+ 15 .debug_aranges 00000178  00000000  00000000  000139b8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_ranges 00000130  00000000  00000000  00013ad0  2**3
+ 16 .debug_ranges 00000130  00000000  00000000  00013b30  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_macro  000010a2  00000000  00000000  00013c00  2**0
+ 17 .debug_macro  000010a2  00000000  00000000  00013c60  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   00001050  00000000  00000000  00014ca2  2**0
+ 18 .debug_line   00001065  00000000  00000000  00014d02  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000048f1  00000000  00000000  00015cf2  2**0
+ 19 .debug_str    000048f9  00000000  00000000  00015d67  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .comment      00000050  00000000  00000000  0001a5e3  2**0
+ 20 .comment      00000050  00000000  00000000  0001a660  2**0
                   CONTENTS, READONLY
- 21 .debug_frame  00000504  00000000  00000000  0001a634  2**2
+ 21 .debug_frame  00000504  00000000  00000000  0001a6b0  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -64,7 +64,7 @@ Disassembly of section .text:
  80001ee:	bd10      	pop	{r4, pc}
  80001f0:	20000000 	.word	0x20000000
  80001f4:	00000000 	.word	0x00000000
- 80001f8:	08001498 	.word	0x08001498
+ 80001f8:	080014e8 	.word	0x080014e8
 
 080001fc <frame_dummy>:
  80001fc:	b508      	push	{r3, lr}
@@ -76,7 +76,7 @@ Disassembly of section .text:
  800020a:	bd08      	pop	{r3, pc}
  800020c:	00000000 	.word	0x00000000
  8000210:	20000004 	.word	0x20000004
- 8000214:	08001498 	.word	0x08001498
+ 8000214:	080014e8 	.word	0x080014e8
 
 08000218 <CAN_voidInit>:
  */
@@ -2133,9 +2133,9 @@ int main()
 	RCC_voidInit();
  8000f8a:	f7ff ff3d 	bl	8000e08 <RCC_voidInit>
 	RCC->CCIPR |= (1 << 25);
- 8000f8e:	4bb9      	ldr	r3, [pc, #740]	; (8001274 <main+0x2f0>)
+ 8000f8e:	4bcc      	ldr	r3, [pc, #816]	; (80012c0 <main+0x33c>)
  8000f90:	f8d3 3088 	ldr.w	r3, [r3, #136]	; 0x88
- 8000f94:	4ab7      	ldr	r2, [pc, #732]	; (8001274 <main+0x2f0>)
+ 8000f94:	4aca      	ldr	r2, [pc, #808]	; (80012c0 <main+0x33c>)
  8000f96:	f043 7300 	orr.w	r3, r3, #33554432	; 0x2000000
  8000f9a:	f8c2 3088 	str.w	r3, [r2, #136]	; 0x88
 
@@ -2157,9 +2157,9 @@ int main()
  8000fba:	f7ff ff7f 	bl	8000ebc <RCC_voidPeripheralClockEnable>
 
 	APP_voidGpioInit();
- 8000fbe:	f000 f95f 	bl	8001280 <APP_voidGpioInit>
+ 8000fbe:	f000 f987 	bl	80012d0 <APP_voidGpioInit>
 	APP_voidCanInit();
- 8000fc2:	f000 f9bd 	bl	8001340 <APP_voidCanInit>
+ 8000fc2:	f000 f9e5 	bl	8001390 <APP_voidCanInit>
 
 	// Initialize Variables
 	CAN_Frame_t Frame[4];
@@ -2314,623 +2314,654 @@ int main()
  80010d0:	210d      	movs	r1, #13
  80010d2:	2002      	movs	r0, #2
  80010d4:	f7ff fd2e 	bl	8000b34 <GPIO_voidSetPinValue>
-
+	u8 counter = 0;
+ 80010d8:	2300      	movs	r3, #0
+ 80010da:	f887 3067 	strb.w	r3, [r7, #103]	; 0x67
 	u8 ledState[3] = {0, 0, 0};
- 80010d8:	4a67      	ldr	r2, [pc, #412]	; (8001278 <main+0x2f4>)
- 80010da:	463b      	mov	r3, r7
- 80010dc:	6812      	ldr	r2, [r2, #0]
- 80010de:	4611      	mov	r1, r2
- 80010e0:	8019      	strh	r1, [r3, #0]
- 80010e2:	3302      	adds	r3, #2
- 80010e4:	0c12      	lsrs	r2, r2, #16
- 80010e6:	701a      	strb	r2, [r3, #0]
+ 80010de:	4a79      	ldr	r2, [pc, #484]	; (80012c4 <main+0x340>)
+ 80010e0:	463b      	mov	r3, r7
+ 80010e2:	6812      	ldr	r2, [r2, #0]
+ 80010e4:	4611      	mov	r1, r2
+ 80010e6:	8019      	strh	r1, [r3, #0]
+ 80010e8:	3302      	adds	r3, #2
+ 80010ea:	0c12      	lsrs	r2, r2, #16
+ 80010ec:	701a      	strb	r2, [r3, #0]
 	while(1)
 	{
 
 		if(CAN_u8GetReceivedMessagesCount(CAN1, CAN_RX_FIFO0) != 0)
- 80010e8:	2100      	movs	r1, #0
- 80010ea:	4864      	ldr	r0, [pc, #400]	; (800127c <main+0x2f8>)
- 80010ec:	f7ff fb6a 	bl	80007c4 <CAN_u8GetReceivedMessagesCount>
- 80010f0:	4603      	mov	r3, r0
- 80010f2:	2b00      	cmp	r3, #0
- 80010f4:	d0f8      	beq.n	80010e8 <main+0x164>
+ 80010ee:	2100      	movs	r1, #0
+ 80010f0:	4875      	ldr	r0, [pc, #468]	; (80012c8 <main+0x344>)
+ 80010f2:	f7ff fb67 	bl	80007c4 <CAN_u8GetReceivedMessagesCount>
+ 80010f6:	4603      	mov	r3, r0
+ 80010f8:	2b00      	cmp	r3, #0
+ 80010fa:	d0f8      	beq.n	80010ee <main+0x16a>
 		{
 			CAN_voidReceiveDataFrame(CAN1, &receiveFrame, CAN_RX_FIFO0);
- 80010f6:	f107 0314 	add.w	r3, r7, #20
- 80010fa:	2200      	movs	r2, #0
- 80010fc:	4619      	mov	r1, r3
- 80010fe:	485f      	ldr	r0, [pc, #380]	; (800127c <main+0x2f8>)
- 8001100:	f7ff fa1a 	bl	8000538 <CAN_voidReceiveDataFrame>
+ 80010fc:	f107 0314 	add.w	r3, r7, #20
+ 8001100:	2200      	movs	r2, #0
+ 8001102:	4619      	mov	r1, r3
+ 8001104:	4870      	ldr	r0, [pc, #448]	; (80012c8 <main+0x344>)
+ 8001106:	f7ff fa17 	bl	8000538 <CAN_voidReceiveDataFrame>
 
 			if(receiveFrame.rtr == CAN_FRAME_REMOTE)
- 8001104:	7e7b      	ldrb	r3, [r7, #25]
- 8001106:	2b01      	cmp	r3, #1
- 8001108:	d147      	bne.n	800119a <main+0x216>
+ 800110a:	7e7b      	ldrb	r3, [r7, #25]
+ 800110c:	2b01      	cmp	r3, #1
+ 800110e:	d167      	bne.n	80011e0 <main+0x25c>
 			{
 				transmitFrame.id = receiveFrame.id;
- 800110a:	697b      	ldr	r3, [r7, #20]
- 800110c:	607b      	str	r3, [r7, #4]
+ 8001110:	697b      	ldr	r3, [r7, #20]
+ 8001112:	607b      	str	r3, [r7, #4]
 
 				u8 state;
 				if(receiveFrame.id == 0x009)
- 800110e:	697b      	ldr	r3, [r7, #20]
- 8001110:	2b09      	cmp	r3, #9
- 8001112:	d103      	bne.n	800111c <main+0x198>
+ 8001114:	697b      	ldr	r3, [r7, #20]
+ 8001116:	2b09      	cmp	r3, #9
+ 8001118:	d103      	bne.n	8001122 <main+0x19e>
 					state = ledState[0];
- 8001114:	783b      	ldrb	r3, [r7, #0]
- 8001116:	f887 3067 	strb.w	r3, [r7, #103]	; 0x67
- 800111a:	e010      	b.n	800113e <main+0x1ba>
+ 800111a:	783b      	ldrb	r3, [r7, #0]
+ 800111c:	f887 3066 	strb.w	r3, [r7, #102]	; 0x66
+ 8001120:	e015      	b.n	800114e <main+0x1ca>
 				else if(receiveFrame.id == 0x00A)
- 800111c:	697b      	ldr	r3, [r7, #20]
- 800111e:	2b0a      	cmp	r3, #10
- 8001120:	d103      	bne.n	800112a <main+0x1a6>
+ 8001122:	697b      	ldr	r3, [r7, #20]
+ 8001124:	2b0a      	cmp	r3, #10
+ 8001126:	d103      	bne.n	8001130 <main+0x1ac>
 					state = ledState[1];
- 8001122:	787b      	ldrb	r3, [r7, #1]
- 8001124:	f887 3067 	strb.w	r3, [r7, #103]	; 0x67
- 8001128:	e009      	b.n	800113e <main+0x1ba>
+ 8001128:	787b      	ldrb	r3, [r7, #1]
+ 800112a:	f887 3066 	strb.w	r3, [r7, #102]	; 0x66
+ 800112e:	e00e      	b.n	800114e <main+0x1ca>
 				else if(receiveFrame.id == 0x003)
- 800112a:	697b      	ldr	r3, [r7, #20]
- 800112c:	2b03      	cmp	r3, #3
- 800112e:	d103      	bne.n	8001138 <main+0x1b4>
+ 8001130:	697b      	ldr	r3, [r7, #20]
+ 8001132:	2b03      	cmp	r3, #3
+ 8001134:	d103      	bne.n	800113e <main+0x1ba>
 					state = ledState[2];
- 8001130:	78bb      	ldrb	r3, [r7, #2]
- 8001132:	f887 3067 	strb.w	r3, [r7, #103]	; 0x67
- 8001136:	e002      	b.n	800113e <main+0x1ba>
-				else
+ 8001136:	78bb      	ldrb	r3, [r7, #2]
+ 8001138:	f887 3066 	strb.w	r3, [r7, #102]	; 0x66
+ 800113c:	e007      	b.n	800114e <main+0x1ca>
+				else{
 					state = 5;
- 8001138:	2305      	movs	r3, #5
- 800113a:	f887 3067 	strb.w	r3, [r7, #103]	; 0x67
-
+ 800113e:	2305      	movs	r3, #5
+ 8001140:	f887 3066 	strb.w	r3, [r7, #102]	; 0x66
+					counter++;
+ 8001144:	f897 3067 	ldrb.w	r3, [r7, #103]	; 0x67
+ 8001148:	3301      	adds	r3, #1
+ 800114a:	f887 3067 	strb.w	r3, [r7, #103]	; 0x67
+				}
 				if(state == 0){
- 800113e:	f897 3067 	ldrb.w	r3, [r7, #103]	; 0x67
- 8001142:	2b00      	cmp	r3, #0
- 8001144:	d108      	bne.n	8001158 <main+0x1d4>
+ 800114e:	f897 3066 	ldrb.w	r3, [r7, #102]	; 0x66
+ 8001152:	2b00      	cmp	r3, #0
+ 8001154:	d108      	bne.n	8001168 <main+0x1e4>
 					transmitFrame.dlc = 3;
- 8001146:	2303      	movs	r3, #3
- 8001148:	723b      	strb	r3, [r7, #8]
+ 8001156:	2303      	movs	r3, #3
+ 8001158:	723b      	strb	r3, [r7, #8]
 					transmitFrame.data[0] = 'O';
- 800114a:	234f      	movs	r3, #79	; 0x4f
- 800114c:	72fb      	strb	r3, [r7, #11]
+ 800115a:	234f      	movs	r3, #79	; 0x4f
+ 800115c:	72fb      	strb	r3, [r7, #11]
 					transmitFrame.data[1] = 'F';
- 800114e:	2346      	movs	r3, #70	; 0x46
- 8001150:	733b      	strb	r3, [r7, #12]
+ 800115e:	2346      	movs	r3, #70	; 0x46
+ 8001160:	733b      	strb	r3, [r7, #12]
 					transmitFrame.data[2] = 'F';
- 8001152:	2346      	movs	r3, #70	; 0x46
- 8001154:	737b      	strb	r3, [r7, #13]
- 8001156:	e01a      	b.n	800118e <main+0x20a>
+ 8001162:	2346      	movs	r3, #70	; 0x46
+ 8001164:	737b      	strb	r3, [r7, #13]
+ 8001166:	e035      	b.n	80011d4 <main+0x250>
 				}
 				else if(state == 1){
- 8001158:	f897 3067 	ldrb.w	r3, [r7, #103]	; 0x67
- 800115c:	2b01      	cmp	r3, #1
- 800115e:	d106      	bne.n	800116e <main+0x1ea>
+ 8001168:	f897 3066 	ldrb.w	r3, [r7, #102]	; 0x66
+ 800116c:	2b01      	cmp	r3, #1
+ 800116e:	d106      	bne.n	800117e <main+0x1fa>
 					transmitFrame.dlc = 2;
- 8001160:	2302      	movs	r3, #2
- 8001162:	723b      	strb	r3, [r7, #8]
+ 8001170:	2302      	movs	r3, #2
+ 8001172:	723b      	strb	r3, [r7, #8]
 					transmitFrame.data[0] = 'O';
- 8001164:	234f      	movs	r3, #79	; 0x4f
- 8001166:	72fb      	strb	r3, [r7, #11]
+ 8001174:	234f      	movs	r3, #79	; 0x4f
+ 8001176:	72fb      	strb	r3, [r7, #11]
 					transmitFrame.data[1] = 'N';
- 8001168:	234e      	movs	r3, #78	; 0x4e
- 800116a:	733b      	strb	r3, [r7, #12]
- 800116c:	e00f      	b.n	800118e <main+0x20a>
+ 8001178:	234e      	movs	r3, #78	; 0x4e
+ 800117a:	733b      	strb	r3, [r7, #12]
+ 800117c:	e02a      	b.n	80011d4 <main+0x250>
 				}
 				else if(state == 5){
- 800116e:	f897 3067 	ldrb.w	r3, [r7, #103]	; 0x67
- 8001172:	2b05      	cmp	r3, #5
- 8001174:	d10b      	bne.n	800118e <main+0x20a>
-					transmitFrame.dlc = 5;
- 8001176:	2305      	movs	r3, #5
- 8001178:	723b      	strb	r3, [r7, #8]
-					transmitFrame.data[0] = 'e';
- 800117a:	2365      	movs	r3, #101	; 0x65
- 800117c:	72fb      	strb	r3, [r7, #11]
-					transmitFrame.data[1] = 'r';
- 800117e:	2372      	movs	r3, #114	; 0x72
- 8001180:	733b      	strb	r3, [r7, #12]
-					transmitFrame.data[2] = 'r';
- 8001182:	2372      	movs	r3, #114	; 0x72
- 8001184:	737b      	strb	r3, [r7, #13]
-					transmitFrame.data[3] = 'o';
- 8001186:	236f      	movs	r3, #111	; 0x6f
- 8001188:	73bb      	strb	r3, [r7, #14]
-					transmitFrame.data[4] = 'r';
- 800118a:	2372      	movs	r3, #114	; 0x72
- 800118c:	73fb      	strb	r3, [r7, #15]
+ 800117e:	f897 3066 	ldrb.w	r3, [r7, #102]	; 0x66
+ 8001182:	2b05      	cmp	r3, #5
+ 8001184:	d126      	bne.n	80011d4 <main+0x250>
+					if(counter < 10){
+ 8001186:	f897 3067 	ldrb.w	r3, [r7, #103]	; 0x67
+ 800118a:	2b09      	cmp	r3, #9
+ 800118c:	d807      	bhi.n	800119e <main+0x21a>
+						transmitFrame.dlc = 1;
+ 800118e:	2301      	movs	r3, #1
+ 8001190:	723b      	strb	r3, [r7, #8]
+						transmitFrame.data[0] = '0' + counter;
+ 8001192:	f897 3067 	ldrb.w	r3, [r7, #103]	; 0x67
+ 8001196:	3330      	adds	r3, #48	; 0x30
+ 8001198:	b2db      	uxtb	r3, r3
+ 800119a:	72fb      	strb	r3, [r7, #11]
+ 800119c:	e01a      	b.n	80011d4 <main+0x250>
+					}
+					else{
+						transmitFrame.dlc = 2;
+ 800119e:	2302      	movs	r3, #2
+ 80011a0:	723b      	strb	r3, [r7, #8]
+						transmitFrame.data[0] = '0' + (counter/10);
+ 80011a2:	f897 3067 	ldrb.w	r3, [r7, #103]	; 0x67
+ 80011a6:	4a49      	ldr	r2, [pc, #292]	; (80012cc <main+0x348>)
+ 80011a8:	fba2 2303 	umull	r2, r3, r2, r3
+ 80011ac:	08db      	lsrs	r3, r3, #3
+ 80011ae:	b2db      	uxtb	r3, r3
+ 80011b0:	3330      	adds	r3, #48	; 0x30
+ 80011b2:	b2db      	uxtb	r3, r3
+ 80011b4:	72fb      	strb	r3, [r7, #11]
+						transmitFrame.data[0] = '0' + (counter%10);
+ 80011b6:	f897 2067 	ldrb.w	r2, [r7, #103]	; 0x67
+ 80011ba:	4b44      	ldr	r3, [pc, #272]	; (80012cc <main+0x348>)
+ 80011bc:	fba3 1302 	umull	r1, r3, r3, r2
+ 80011c0:	08d9      	lsrs	r1, r3, #3
+ 80011c2:	460b      	mov	r3, r1
+ 80011c4:	009b      	lsls	r3, r3, #2
+ 80011c6:	440b      	add	r3, r1
+ 80011c8:	005b      	lsls	r3, r3, #1
+ 80011ca:	1ad3      	subs	r3, r2, r3
+ 80011cc:	b2db      	uxtb	r3, r3
+ 80011ce:	3330      	adds	r3, #48	; 0x30
+ 80011d0:	b2db      	uxtb	r3, r3
+ 80011d2:	72fb      	strb	r3, [r7, #11]
+					}
+
 				}
 
 				CAN_voidSendDataFrame(CAN1, &transmitFrame);
- 800118e:	1d3b      	adds	r3, r7, #4
- 8001190:	4619      	mov	r1, r3
- 8001192:	483a      	ldr	r0, [pc, #232]	; (800127c <main+0x2f8>)
- 8001194:	f7ff fb36 	bl	8000804 <CAN_voidSendDataFrame>
- 8001198:	e7a6      	b.n	80010e8 <main+0x164>
+ 80011d4:	1d3b      	adds	r3, r7, #4
+ 80011d6:	4619      	mov	r1, r3
+ 80011d8:	483b      	ldr	r0, [pc, #236]	; (80012c8 <main+0x344>)
+ 80011da:	f7ff fb13 	bl	8000804 <CAN_voidSendDataFrame>
+ 80011de:	e786      	b.n	80010ee <main+0x16a>
 			}
 			else
 			{
 				if(receiveFrame.dlc >= 6
- 800119a:	7e3b      	ldrb	r3, [r7, #24]
- 800119c:	2b05      	cmp	r3, #5
- 800119e:	d9a3      	bls.n	80010e8 <main+0x164>
+ 80011e0:	7e3b      	ldrb	r3, [r7, #24]
+ 80011e2:	2b05      	cmp	r3, #5
+ 80011e4:	d983      	bls.n	80010ee <main+0x16a>
 				&& 	receiveFrame.data[0] == 't'
- 80011a0:	7efb      	ldrb	r3, [r7, #27]
- 80011a2:	2b74      	cmp	r3, #116	; 0x74
- 80011a4:	d1a0      	bne.n	80010e8 <main+0x164>
+ 80011e6:	7efb      	ldrb	r3, [r7, #27]
+ 80011e8:	2b74      	cmp	r3, #116	; 0x74
+ 80011ea:	d180      	bne.n	80010ee <main+0x16a>
 				&& 	receiveFrame.data[1] == 'u'
- 80011a6:	7f3b      	ldrb	r3, [r7, #28]
- 80011a8:	2b75      	cmp	r3, #117	; 0x75
- 80011aa:	d19d      	bne.n	80010e8 <main+0x164>
+ 80011ec:	7f3b      	ldrb	r3, [r7, #28]
+ 80011ee:	2b75      	cmp	r3, #117	; 0x75
+ 80011f0:	f47f af7d 	bne.w	80010ee <main+0x16a>
 				&& 	receiveFrame.data[2] == 'r'
- 80011ac:	7f7b      	ldrb	r3, [r7, #29]
- 80011ae:	2b72      	cmp	r3, #114	; 0x72
- 80011b0:	d19a      	bne.n	80010e8 <main+0x164>
+ 80011f4:	7f7b      	ldrb	r3, [r7, #29]
+ 80011f6:	2b72      	cmp	r3, #114	; 0x72
+ 80011f8:	f47f af79 	bne.w	80010ee <main+0x16a>
 				&& 	receiveFrame.data[3] == 'n'
- 80011b2:	7fbb      	ldrb	r3, [r7, #30]
- 80011b4:	2b6e      	cmp	r3, #110	; 0x6e
- 80011b6:	d197      	bne.n	80010e8 <main+0x164>
+ 80011fc:	7fbb      	ldrb	r3, [r7, #30]
+ 80011fe:	2b6e      	cmp	r3, #110	; 0x6e
+ 8001200:	f47f af75 	bne.w	80010ee <main+0x16a>
 				&& 	receiveFrame.data[4] == 'O'
- 80011b8:	7ffb      	ldrb	r3, [r7, #31]
- 80011ba:	2b4f      	cmp	r3, #79	; 0x4f
- 80011bc:	d194      	bne.n	80010e8 <main+0x164>
+ 8001204:	7ffb      	ldrb	r3, [r7, #31]
+ 8001206:	2b4f      	cmp	r3, #79	; 0x4f
+ 8001208:	f47f af71 	bne.w	80010ee <main+0x16a>
 				)
 				{
 					if(receiveFrame.dlc == 6 && receiveFrame.data[5] == 'N')
- 80011be:	7e3b      	ldrb	r3, [r7, #24]
- 80011c0:	2b06      	cmp	r3, #6
- 80011c2:	d124      	bne.n	800120e <main+0x28a>
- 80011c4:	f897 3020 	ldrb.w	r3, [r7, #32]
- 80011c8:	2b4e      	cmp	r3, #78	; 0x4e
- 80011ca:	d120      	bne.n	800120e <main+0x28a>
+ 800120c:	7e3b      	ldrb	r3, [r7, #24]
+ 800120e:	2b06      	cmp	r3, #6
+ 8001210:	d124      	bne.n	800125c <main+0x2d8>
+ 8001212:	f897 3020 	ldrb.w	r3, [r7, #32]
+ 8001216:	2b4e      	cmp	r3, #78	; 0x4e
+ 8001218:	d120      	bne.n	800125c <main+0x2d8>
 					{
 						if(receiveFrame.id == 0x009){
- 80011cc:	697b      	ldr	r3, [r7, #20]
- 80011ce:	2b09      	cmp	r3, #9
- 80011d0:	d107      	bne.n	80011e2 <main+0x25e>
+ 800121a:	697b      	ldr	r3, [r7, #20]
+ 800121c:	2b09      	cmp	r3, #9
+ 800121e:	d107      	bne.n	8001230 <main+0x2ac>
 							ledState[0] = 1;
- 80011d2:	2301      	movs	r3, #1
- 80011d4:	703b      	strb	r3, [r7, #0]
+ 8001220:	2301      	movs	r3, #1
+ 8001222:	703b      	strb	r3, [r7, #0]
 							GPIO_voidSetPinValue(GPIO_PORTA, 9, 0);
- 80011d6:	2200      	movs	r2, #0
- 80011d8:	2109      	movs	r1, #9
- 80011da:	2000      	movs	r0, #0
- 80011dc:	f7ff fcaa 	bl	8000b34 <GPIO_voidSetPinValue>
+ 8001224:	2200      	movs	r2, #0
+ 8001226:	2109      	movs	r1, #9
+ 8001228:	2000      	movs	r0, #0
+ 800122a:	f7ff fc83 	bl	8000b34 <GPIO_voidSetPinValue>
 						if(receiveFrame.id == 0x009){
- 80011e0:	e045      	b.n	800126e <main+0x2ea>
+ 800122e:	e045      	b.n	80012bc <main+0x338>
 						}
 						else if(receiveFrame.id == 0x00A){
- 80011e2:	697b      	ldr	r3, [r7, #20]
- 80011e4:	2b0a      	cmp	r3, #10
- 80011e6:	d107      	bne.n	80011f8 <main+0x274>
+ 8001230:	697b      	ldr	r3, [r7, #20]
+ 8001232:	2b0a      	cmp	r3, #10
+ 8001234:	d107      	bne.n	8001246 <main+0x2c2>
 							ledState[1] = 1;
- 80011e8:	2301      	movs	r3, #1
- 80011ea:	707b      	strb	r3, [r7, #1]
+ 8001236:	2301      	movs	r3, #1
+ 8001238:	707b      	strb	r3, [r7, #1]
 							GPIO_voidSetPinValue(GPIO_PORTA, 10, 0);
- 80011ec:	2200      	movs	r2, #0
- 80011ee:	210a      	movs	r1, #10
- 80011f0:	2000      	movs	r0, #0
- 80011f2:	f7ff fc9f 	bl	8000b34 <GPIO_voidSetPinValue>
+ 800123a:	2200      	movs	r2, #0
+ 800123c:	210a      	movs	r1, #10
+ 800123e:	2000      	movs	r0, #0
+ 8001240:	f7ff fc78 	bl	8000b34 <GPIO_voidSetPinValue>
 						if(receiveFrame.id == 0x009){
- 80011f6:	e03a      	b.n	800126e <main+0x2ea>
+ 8001244:	e03a      	b.n	80012bc <main+0x338>
 						}
 						else if(receiveFrame.id == 0x003){
- 80011f8:	697b      	ldr	r3, [r7, #20]
- 80011fa:	2b03      	cmp	r3, #3
- 80011fc:	d137      	bne.n	800126e <main+0x2ea>
+ 8001246:	697b      	ldr	r3, [r7, #20]
+ 8001248:	2b03      	cmp	r3, #3
+ 800124a:	d137      	bne.n	80012bc <main+0x338>
 							ledState[2] = 1;
- 80011fe:	2301      	movs	r3, #1
- 8001200:	70bb      	strb	r3, [r7, #2]
+ 800124c:	2301      	movs	r3, #1
+ 800124e:	70bb      	strb	r3, [r7, #2]
 							GPIO_voidSetPinValue(GPIO_PORTA, 3, 0);
- 8001202:	2200      	movs	r2, #0
- 8001204:	2103      	movs	r1, #3
- 8001206:	2000      	movs	r0, #0
- 8001208:	f7ff fc94 	bl	8000b34 <GPIO_voidSetPinValue>
+ 8001250:	2200      	movs	r2, #0
+ 8001252:	2103      	movs	r1, #3
+ 8001254:	2000      	movs	r0, #0
+ 8001256:	f7ff fc6d 	bl	8000b34 <GPIO_voidSetPinValue>
 						if(receiveFrame.id == 0x009){
- 800120c:	e02f      	b.n	800126e <main+0x2ea>
+ 800125a:	e02f      	b.n	80012bc <main+0x338>
 						}
 					}
 					else if(receiveFrame.dlc == 7 && receiveFrame.data[5] == 'F' && receiveFrame.data[6] == 'F')
- 800120e:	7e3b      	ldrb	r3, [r7, #24]
- 8001210:	2b07      	cmp	r3, #7
- 8001212:	f47f af69 	bne.w	80010e8 <main+0x164>
- 8001216:	f897 3020 	ldrb.w	r3, [r7, #32]
- 800121a:	2b46      	cmp	r3, #70	; 0x46
- 800121c:	f47f af64 	bne.w	80010e8 <main+0x164>
- 8001220:	f897 3021 	ldrb.w	r3, [r7, #33]	; 0x21
- 8001224:	2b46      	cmp	r3, #70	; 0x46
- 8001226:	f47f af5f 	bne.w	80010e8 <main+0x164>
+ 800125c:	7e3b      	ldrb	r3, [r7, #24]
+ 800125e:	2b07      	cmp	r3, #7
+ 8001260:	f47f af45 	bne.w	80010ee <main+0x16a>
+ 8001264:	f897 3020 	ldrb.w	r3, [r7, #32]
+ 8001268:	2b46      	cmp	r3, #70	; 0x46
+ 800126a:	f47f af40 	bne.w	80010ee <main+0x16a>
+ 800126e:	f897 3021 	ldrb.w	r3, [r7, #33]	; 0x21
+ 8001272:	2b46      	cmp	r3, #70	; 0x46
+ 8001274:	f47f af3b 	bne.w	80010ee <main+0x16a>
 					{
 						if(receiveFrame.id == 0x009){
- 800122a:	697b      	ldr	r3, [r7, #20]
- 800122c:	2b09      	cmp	r3, #9
- 800122e:	d107      	bne.n	8001240 <main+0x2bc>
+ 8001278:	697b      	ldr	r3, [r7, #20]
+ 800127a:	2b09      	cmp	r3, #9
+ 800127c:	d107      	bne.n	800128e <main+0x30a>
 							ledState[0] = 0;
- 8001230:	2300      	movs	r3, #0
- 8001232:	703b      	strb	r3, [r7, #0]
+ 800127e:	2300      	movs	r3, #0
+ 8001280:	703b      	strb	r3, [r7, #0]
 							GPIO_voidSetPinValue(GPIO_PORTA, 9, 1);
- 8001234:	2201      	movs	r2, #1
- 8001236:	2109      	movs	r1, #9
- 8001238:	2000      	movs	r0, #0
- 800123a:	f7ff fc7b 	bl	8000b34 <GPIO_voidSetPinValue>
- 800123e:	e753      	b.n	80010e8 <main+0x164>
+ 8001282:	2201      	movs	r2, #1
+ 8001284:	2109      	movs	r1, #9
+ 8001286:	2000      	movs	r0, #0
+ 8001288:	f7ff fc54 	bl	8000b34 <GPIO_voidSetPinValue>
+ 800128c:	e72f      	b.n	80010ee <main+0x16a>
 						}
 						else if(receiveFrame.id == 0x00A){
- 8001240:	697b      	ldr	r3, [r7, #20]
- 8001242:	2b0a      	cmp	r3, #10
- 8001244:	d107      	bne.n	8001256 <main+0x2d2>
+ 800128e:	697b      	ldr	r3, [r7, #20]
+ 8001290:	2b0a      	cmp	r3, #10
+ 8001292:	d107      	bne.n	80012a4 <main+0x320>
 							ledState[1] = 0;
- 8001246:	2300      	movs	r3, #0
- 8001248:	707b      	strb	r3, [r7, #1]
+ 8001294:	2300      	movs	r3, #0
+ 8001296:	707b      	strb	r3, [r7, #1]
 							GPIO_voidSetPinValue(GPIO_PORTA, 10, 1);
- 800124a:	2201      	movs	r2, #1
- 800124c:	210a      	movs	r1, #10
- 800124e:	2000      	movs	r0, #0
- 8001250:	f7ff fc70 	bl	8000b34 <GPIO_voidSetPinValue>
- 8001254:	e748      	b.n	80010e8 <main+0x164>
+ 8001298:	2201      	movs	r2, #1
+ 800129a:	210a      	movs	r1, #10
+ 800129c:	2000      	movs	r0, #0
+ 800129e:	f7ff fc49 	bl	8000b34 <GPIO_voidSetPinValue>
+ 80012a2:	e724      	b.n	80010ee <main+0x16a>
 						}
 						else if(receiveFrame.id == 0x003){
- 8001256:	697b      	ldr	r3, [r7, #20]
- 8001258:	2b03      	cmp	r3, #3
- 800125a:	f47f af45 	bne.w	80010e8 <main+0x164>
+ 80012a4:	697b      	ldr	r3, [r7, #20]
+ 80012a6:	2b03      	cmp	r3, #3
+ 80012a8:	f47f af21 	bne.w	80010ee <main+0x16a>
 							ledState[2] = 0;
- 800125e:	2300      	movs	r3, #0
- 8001260:	70bb      	strb	r3, [r7, #2]
+ 80012ac:	2300      	movs	r3, #0
+ 80012ae:	70bb      	strb	r3, [r7, #2]
 							GPIO_voidSetPinValue(GPIO_PORTA, 3, 1);
- 8001262:	2201      	movs	r2, #1
- 8001264:	2103      	movs	r1, #3
- 8001266:	2000      	movs	r0, #0
- 8001268:	f7ff fc64 	bl	8000b34 <GPIO_voidSetPinValue>
- 800126c:	e73c      	b.n	80010e8 <main+0x164>
+ 80012b0:	2201      	movs	r2, #1
+ 80012b2:	2103      	movs	r1, #3
+ 80012b4:	2000      	movs	r0, #0
+ 80012b6:	f7ff fc3d 	bl	8000b34 <GPIO_voidSetPinValue>
+ 80012ba:	e718      	b.n	80010ee <main+0x16a>
 						if(receiveFrame.id == 0x009){
- 800126e:	bf00      	nop
+ 80012bc:	bf00      	nop
 		if(CAN_u8GetReceivedMessagesCount(CAN1, CAN_RX_FIFO0) != 0)
- 8001270:	e73a      	b.n	80010e8 <main+0x164>
- 8001272:	bf00      	nop
- 8001274:	40021000 	.word	0x40021000
- 8001278:	080014b0 	.word	0x080014b0
- 800127c:	40006400 	.word	0x40006400
+ 80012be:	e716      	b.n	80010ee <main+0x16a>
+ 80012c0:	40021000 	.word	0x40021000
+ 80012c4:	08001500 	.word	0x08001500
+ 80012c8:	40006400 	.word	0x40006400
+ 80012cc:	cccccccd 	.word	0xcccccccd
 
-08001280 <APP_voidGpioInit>:
+080012d0 <APP_voidGpioInit>:
 		}
 	}
 }
 
 void APP_voidGpioInit(void)
 {
- 8001280:	b580      	push	{r7, lr}
- 8001282:	b08a      	sub	sp, #40	; 0x28
- 8001284:	af00      	add	r7, sp, #0
+ 80012d0:	b580      	push	{r7, lr}
+ 80012d2:	b08a      	sub	sp, #40	; 0x28
+ 80012d4:	af00      	add	r7, sp, #0
 	MGPIO_Config_t Tx2 = {.Port = GPIO_PORTA, .Pin = GPIO_PIN2, .Mode = GPIO_MODE_OUTPUT,.AltFunc = GPIO_AF9,.OutputSpeed = GPIO_SPEED_LOW,.OutputType = GPIO_OT_PUSHPULL};
- 8001286:	f107 0320 	add.w	r3, r7, #32
- 800128a:	2200      	movs	r2, #0
- 800128c:	601a      	str	r2, [r3, #0]
- 800128e:	f8c3 2003 	str.w	r2, [r3, #3]
- 8001292:	2302      	movs	r3, #2
- 8001294:	f887 3021 	strb.w	r3, [r7, #33]	; 0x21
- 8001298:	2301      	movs	r3, #1
- 800129a:	f887 3022 	strb.w	r3, [r7, #34]	; 0x22
- 800129e:	2309      	movs	r3, #9
- 80012a0:	f887 3026 	strb.w	r3, [r7, #38]	; 0x26
+ 80012d6:	f107 0320 	add.w	r3, r7, #32
+ 80012da:	2200      	movs	r2, #0
+ 80012dc:	601a      	str	r2, [r3, #0]
+ 80012de:	f8c3 2003 	str.w	r2, [r3, #3]
+ 80012e2:	2302      	movs	r3, #2
+ 80012e4:	f887 3021 	strb.w	r3, [r7, #33]	; 0x21
+ 80012e8:	2301      	movs	r3, #1
+ 80012ea:	f887 3022 	strb.w	r3, [r7, #34]	; 0x22
+ 80012ee:	2309      	movs	r3, #9
+ 80012f0:	f887 3026 	strb.w	r3, [r7, #38]	; 0x26
 	MGPIO_Config_t Rx2 = {.Port = GPIO_PORTA, .Pin = GPIO_PIN3, .Mode = GPIO_MODE_OUTPUT,.AltFunc = GPIO_AF9,.OutputSpeed = GPIO_SPEED_LOW,.OutputType = GPIO_OT_PUSHPULL};
- 80012a4:	f107 0318 	add.w	r3, r7, #24
- 80012a8:	2200      	movs	r2, #0
- 80012aa:	601a      	str	r2, [r3, #0]
- 80012ac:	f8c3 2003 	str.w	r2, [r3, #3]
- 80012b0:	2303      	movs	r3, #3
- 80012b2:	767b      	strb	r3, [r7, #25]
- 80012b4:	2301      	movs	r3, #1
- 80012b6:	76bb      	strb	r3, [r7, #26]
- 80012b8:	2309      	movs	r3, #9
- 80012ba:	77bb      	strb	r3, [r7, #30]
+ 80012f4:	f107 0318 	add.w	r3, r7, #24
+ 80012f8:	2200      	movs	r2, #0
+ 80012fa:	601a      	str	r2, [r3, #0]
+ 80012fc:	f8c3 2003 	str.w	r2, [r3, #3]
+ 8001300:	2303      	movs	r3, #3
+ 8001302:	767b      	strb	r3, [r7, #25]
+ 8001304:	2301      	movs	r3, #1
+ 8001306:	76bb      	strb	r3, [r7, #26]
+ 8001308:	2309      	movs	r3, #9
+ 800130a:	77bb      	strb	r3, [r7, #30]
 	MGPIO_Config_t Tx1 = {.Port = GPIO_PORTA, .Pin = GPIO_PIN9, .Mode = GPIO_MODE_OUTPUT,.AltFunc = GPIO_AF9,.OutputSpeed = GPIO_SPEED_LOW,.OutputType = GPIO_OT_PUSHPULL};
- 80012bc:	f107 0310 	add.w	r3, r7, #16
- 80012c0:	2200      	movs	r2, #0
- 80012c2:	601a      	str	r2, [r3, #0]
- 80012c4:	f8c3 2003 	str.w	r2, [r3, #3]
- 80012c8:	2309      	movs	r3, #9
- 80012ca:	747b      	strb	r3, [r7, #17]
- 80012cc:	2301      	movs	r3, #1
- 80012ce:	74bb      	strb	r3, [r7, #18]
- 80012d0:	2309      	movs	r3, #9
- 80012d2:	75bb      	strb	r3, [r7, #22]
+ 800130c:	f107 0310 	add.w	r3, r7, #16
+ 8001310:	2200      	movs	r2, #0
+ 8001312:	601a      	str	r2, [r3, #0]
+ 8001314:	f8c3 2003 	str.w	r2, [r3, #3]
+ 8001318:	2309      	movs	r3, #9
+ 800131a:	747b      	strb	r3, [r7, #17]
+ 800131c:	2301      	movs	r3, #1
+ 800131e:	74bb      	strb	r3, [r7, #18]
+ 8001320:	2309      	movs	r3, #9
+ 8001322:	75bb      	strb	r3, [r7, #22]
 	MGPIO_Config_t Rx1 = {.Port = GPIO_PORTA, .Pin = GPIO_PIN10, .Mode = GPIO_MODE_OUTPUT,.AltFunc = GPIO_AF9,.OutputSpeed = GPIO_SPEED_LOW,.OutputType = GPIO_OT_PUSHPULL};
- 80012d4:	f107 0308 	add.w	r3, r7, #8
- 80012d8:	2200      	movs	r2, #0
- 80012da:	601a      	str	r2, [r3, #0]
- 80012dc:	f8c3 2003 	str.w	r2, [r3, #3]
- 80012e0:	230a      	movs	r3, #10
- 80012e2:	727b      	strb	r3, [r7, #9]
- 80012e4:	2301      	movs	r3, #1
- 80012e6:	72bb      	strb	r3, [r7, #10]
- 80012e8:	2309      	movs	r3, #9
- 80012ea:	73bb      	strb	r3, [r7, #14]
+ 8001324:	f107 0308 	add.w	r3, r7, #8
+ 8001328:	2200      	movs	r2, #0
+ 800132a:	601a      	str	r2, [r3, #0]
+ 800132c:	f8c3 2003 	str.w	r2, [r3, #3]
+ 8001330:	230a      	movs	r3, #10
+ 8001332:	727b      	strb	r3, [r7, #9]
+ 8001334:	2301      	movs	r3, #1
+ 8001336:	72bb      	strb	r3, [r7, #10]
+ 8001338:	2309      	movs	r3, #9
+ 800133a:	73bb      	strb	r3, [r7, #14]
 
 	MGPIO_Config_t PC13 = {.Port = GPIO_PORTC, .Pin = GPIO_PIN13, .Mode = GPIO_MODE_OUTPUT,.AltFunc = GPIO_AF9,.OutputSpeed = GPIO_SPEED_LOW,.OutputType = GPIO_OT_PUSHPULL};
- 80012ec:	463b      	mov	r3, r7
- 80012ee:	2200      	movs	r2, #0
- 80012f0:	601a      	str	r2, [r3, #0]
- 80012f2:	f8c3 2003 	str.w	r2, [r3, #3]
- 80012f6:	2302      	movs	r3, #2
- 80012f8:	703b      	strb	r3, [r7, #0]
- 80012fa:	230d      	movs	r3, #13
- 80012fc:	707b      	strb	r3, [r7, #1]
- 80012fe:	2301      	movs	r3, #1
- 8001300:	70bb      	strb	r3, [r7, #2]
- 8001302:	2309      	movs	r3, #9
- 8001304:	71bb      	strb	r3, [r7, #6]
+ 800133c:	463b      	mov	r3, r7
+ 800133e:	2200      	movs	r2, #0
+ 8001340:	601a      	str	r2, [r3, #0]
+ 8001342:	f8c3 2003 	str.w	r2, [r3, #3]
+ 8001346:	2302      	movs	r3, #2
+ 8001348:	703b      	strb	r3, [r7, #0]
+ 800134a:	230d      	movs	r3, #13
+ 800134c:	707b      	strb	r3, [r7, #1]
+ 800134e:	2301      	movs	r3, #1
+ 8001350:	70bb      	strb	r3, [r7, #2]
+ 8001352:	2309      	movs	r3, #9
+ 8001354:	71bb      	strb	r3, [r7, #6]
 
 	GPIO_voidInitPin(&Tx1);
- 8001306:	f107 0310 	add.w	r3, r7, #16
- 800130a:	4618      	mov	r0, r3
- 800130c:	f7ff fd4e 	bl	8000dac <GPIO_voidInitPin>
+ 8001356:	f107 0310 	add.w	r3, r7, #16
+ 800135a:	4618      	mov	r0, r3
+ 800135c:	f7ff fd26 	bl	8000dac <GPIO_voidInitPin>
 	GPIO_voidInitPin(&Rx1);
- 8001310:	f107 0308 	add.w	r3, r7, #8
- 8001314:	4618      	mov	r0, r3
- 8001316:	f7ff fd49 	bl	8000dac <GPIO_voidInitPin>
+ 8001360:	f107 0308 	add.w	r3, r7, #8
+ 8001364:	4618      	mov	r0, r3
+ 8001366:	f7ff fd21 	bl	8000dac <GPIO_voidInitPin>
 	GPIO_voidInitPin(&Tx2);
- 800131a:	f107 0320 	add.w	r3, r7, #32
- 800131e:	4618      	mov	r0, r3
- 8001320:	f7ff fd44 	bl	8000dac <GPIO_voidInitPin>
+ 800136a:	f107 0320 	add.w	r3, r7, #32
+ 800136e:	4618      	mov	r0, r3
+ 8001370:	f7ff fd1c 	bl	8000dac <GPIO_voidInitPin>
 	GPIO_voidInitPin(&Rx2);
- 8001324:	f107 0318 	add.w	r3, r7, #24
- 8001328:	4618      	mov	r0, r3
- 800132a:	f7ff fd3f 	bl	8000dac <GPIO_voidInitPin>
+ 8001374:	f107 0318 	add.w	r3, r7, #24
+ 8001378:	4618      	mov	r0, r3
+ 800137a:	f7ff fd17 	bl	8000dac <GPIO_voidInitPin>
 
 	GPIO_voidInitPin(&PC13);
- 800132e:	463b      	mov	r3, r7
- 8001330:	4618      	mov	r0, r3
- 8001332:	f7ff fd3b 	bl	8000dac <GPIO_voidInitPin>
+ 800137e:	463b      	mov	r3, r7
+ 8001380:	4618      	mov	r0, r3
+ 8001382:	f7ff fd13 	bl	8000dac <GPIO_voidInitPin>
 }
- 8001336:	bf00      	nop
- 8001338:	3728      	adds	r7, #40	; 0x28
- 800133a:	46bd      	mov	sp, r7
- 800133c:	bd80      	pop	{r7, pc}
+ 8001386:	bf00      	nop
+ 8001388:	3728      	adds	r7, #40	; 0x28
+ 800138a:	46bd      	mov	sp, r7
+ 800138c:	bd80      	pop	{r7, pc}
 	...
 
-08001340 <APP_voidCanInit>:
+08001390 <APP_voidCanInit>:
 
 void APP_voidCanInit(void)
 {
- 8001340:	b590      	push	{r4, r7, lr}
- 8001342:	b08f      	sub	sp, #60	; 0x3c
- 8001344:	af00      	add	r7, sp, #0
+ 8001390:	b590      	push	{r4, r7, lr}
+ 8001392:	b08f      	sub	sp, #60	; 0x3c
+ 8001394:	af00      	add	r7, sp, #0
 	MGPIO_Config_t canTxPin = {.Port = GPIO_PORTB, .Pin = GPIO_PIN9, .Mode = GPIO_MODE_ALTF,.AltFunc = GPIO_AF9,.OutputSpeed = GPIO_SPEED_LOW,.OutputType = GPIO_OT_PUSHPULL};
- 8001346:	f107 0330 	add.w	r3, r7, #48	; 0x30
- 800134a:	2200      	movs	r2, #0
- 800134c:	601a      	str	r2, [r3, #0]
- 800134e:	f8c3 2003 	str.w	r2, [r3, #3]
- 8001352:	2301      	movs	r3, #1
- 8001354:	f887 3030 	strb.w	r3, [r7, #48]	; 0x30
- 8001358:	2309      	movs	r3, #9
- 800135a:	f887 3031 	strb.w	r3, [r7, #49]	; 0x31
- 800135e:	2302      	movs	r3, #2
- 8001360:	f887 3032 	strb.w	r3, [r7, #50]	; 0x32
- 8001364:	2309      	movs	r3, #9
- 8001366:	f887 3036 	strb.w	r3, [r7, #54]	; 0x36
+ 8001396:	f107 0330 	add.w	r3, r7, #48	; 0x30
+ 800139a:	2200      	movs	r2, #0
+ 800139c:	601a      	str	r2, [r3, #0]
+ 800139e:	f8c3 2003 	str.w	r2, [r3, #3]
+ 80013a2:	2301      	movs	r3, #1
+ 80013a4:	f887 3030 	strb.w	r3, [r7, #48]	; 0x30
+ 80013a8:	2309      	movs	r3, #9
+ 80013aa:	f887 3031 	strb.w	r3, [r7, #49]	; 0x31
+ 80013ae:	2302      	movs	r3, #2
+ 80013b0:	f887 3032 	strb.w	r3, [r7, #50]	; 0x32
+ 80013b4:	2309      	movs	r3, #9
+ 80013b6:	f887 3036 	strb.w	r3, [r7, #54]	; 0x36
 	MGPIO_Config_t canRxPin = {.Port = GPIO_PORTB, .Pin = GPIO_PIN8, .Mode = GPIO_MODE_ALTF,.AltFunc = GPIO_AF9,.OutputSpeed = GPIO_SPEED_LOW,.OutputType = GPIO_OT_PUSHPULL};
- 800136a:	f107 0328 	add.w	r3, r7, #40	; 0x28
- 800136e:	2200      	movs	r2, #0
- 8001370:	601a      	str	r2, [r3, #0]
- 8001372:	f8c3 2003 	str.w	r2, [r3, #3]
- 8001376:	2301      	movs	r3, #1
- 8001378:	f887 3028 	strb.w	r3, [r7, #40]	; 0x28
- 800137c:	2308      	movs	r3, #8
- 800137e:	f887 3029 	strb.w	r3, [r7, #41]	; 0x29
- 8001382:	2302      	movs	r3, #2
- 8001384:	f887 302a 	strb.w	r3, [r7, #42]	; 0x2a
- 8001388:	2309      	movs	r3, #9
- 800138a:	f887 302e 	strb.w	r3, [r7, #46]	; 0x2e
+ 80013ba:	f107 0328 	add.w	r3, r7, #40	; 0x28
+ 80013be:	2200      	movs	r2, #0
+ 80013c0:	601a      	str	r2, [r3, #0]
+ 80013c2:	f8c3 2003 	str.w	r2, [r3, #3]
+ 80013c6:	2301      	movs	r3, #1
+ 80013c8:	f887 3028 	strb.w	r3, [r7, #40]	; 0x28
+ 80013cc:	2308      	movs	r3, #8
+ 80013ce:	f887 3029 	strb.w	r3, [r7, #41]	; 0x29
+ 80013d2:	2302      	movs	r3, #2
+ 80013d4:	f887 302a 	strb.w	r3, [r7, #42]	; 0x2a
+ 80013d8:	2309      	movs	r3, #9
+ 80013da:	f887 302e 	strb.w	r3, [r7, #46]	; 0x2e
 
 	CAN_TxConfig_t txCfg;
 	txCfg.automaticTransmission = CAN_AUTOMATIC_TRANSMISSION_DISABLE;
- 800138e:	2301      	movs	r3, #1
- 8001390:	f887 3026 	strb.w	r3, [r7, #38]	; 0x26
+ 80013de:	2301      	movs	r3, #1
+ 80013e0:	f887 3026 	strb.w	r3, [r7, #38]	; 0x26
 	txCfg.bufferType = CAN_TX_BUFFER_FIFO;
- 8001394:	2300      	movs	r3, #0
- 8001396:	f887 3025 	strb.w	r3, [r7, #37]	; 0x25
+ 80013e4:	2300      	movs	r3, #0
+ 80013e6:	f887 3025 	strb.w	r3, [r7, #37]	; 0x25
 	txCfg.transmitPause = CAN_TX_PAUSE_DISABLE;
- 800139a:	2300      	movs	r3, #0
- 800139c:	f887 3024 	strb.w	r3, [r7, #36]	; 0x24
+ 80013ea:	2300      	movs	r3, #0
+ 80013ec:	f887 3024 	strb.w	r3, [r7, #36]	; 0x24
 
 	CAN_RxConfig_t rxCfg;
 	rxCfg.FIFO0_Mode = CAN_RX_FIFO_OVERWRITE;
- 80013a0:	2301      	movs	r3, #1
- 80013a2:	757b      	strb	r3, [r7, #21]
+ 80013f0:	2301      	movs	r3, #1
+ 80013f2:	757b      	strb	r3, [r7, #21]
 	rxCfg.FIFO1_Mode = CAN_RX_FIFO_OVERWRITE;
- 80013a4:	2301      	movs	r3, #1
- 80013a6:	75bb      	strb	r3, [r7, #22]
+ 80013f4:	2301      	movs	r3, #1
+ 80013f6:	75bb      	strb	r3, [r7, #22]
 	rxCfg.FIFO0_numberOfIDs = 4;
- 80013a8:	2304      	movs	r3, #4
- 80013aa:	75fb      	strb	r3, [r7, #23]
+ 80013f8:	2304      	movs	r3, #4
+ 80013fa:	75fb      	strb	r3, [r7, #23]
 	rxCfg.FIFO1_numberOfIDs = 0;
- 80013ac:	2300      	movs	r3, #0
- 80013ae:	763b      	strb	r3, [r7, #24]
+ 80013fc:	2300      	movs	r3, #0
+ 80013fe:	763b      	strb	r3, [r7, #24]
 	u32 ids[4] = {0x003, 0x009, 0x00A, 0x00F};
- 80013b0:	4b10      	ldr	r3, [pc, #64]	; (80013f4 <APP_voidCanInit+0xb4>)
- 80013b2:	1d3c      	adds	r4, r7, #4
- 80013b4:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
- 80013b6:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
+ 8001400:	4b10      	ldr	r3, [pc, #64]	; (8001444 <APP_voidCanInit+0xb4>)
+ 8001402:	1d3c      	adds	r4, r7, #4
+ 8001404:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
+ 8001406:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
 	rxCfg.FIFO0_IDs = ids;
- 80013ba:	1d3b      	adds	r3, r7, #4
- 80013bc:	61fb      	str	r3, [r7, #28]
+ 800140a:	1d3b      	adds	r3, r7, #4
+ 800140c:	61fb      	str	r3, [r7, #28]
 	rxCfg.FIFO1_IDs = NULL;
- 80013be:	2300      	movs	r3, #0
- 80013c0:	623b      	str	r3, [r7, #32]
+ 800140e:	2300      	movs	r3, #0
+ 8001410:	623b      	str	r3, [r7, #32]
 	rxCfg.nonMatchingFrames = CAN_RX_REJECT;
- 80013c2:	2302      	movs	r3, #2
- 80013c4:	753b      	strb	r3, [r7, #20]
+ 8001412:	2302      	movs	r3, #2
+ 8001414:	753b      	strb	r3, [r7, #20]
 
 	GPIO_voidInitPin(&canTxPin);
- 80013c6:	f107 0330 	add.w	r3, r7, #48	; 0x30
- 80013ca:	4618      	mov	r0, r3
- 80013cc:	f7ff fcee 	bl	8000dac <GPIO_voidInitPin>
+ 8001416:	f107 0330 	add.w	r3, r7, #48	; 0x30
+ 800141a:	4618      	mov	r0, r3
+ 800141c:	f7ff fcc6 	bl	8000dac <GPIO_voidInitPin>
 	GPIO_voidInitPin(&canRxPin);
- 80013d0:	f107 0328 	add.w	r3, r7, #40	; 0x28
- 80013d4:	4618      	mov	r0, r3
- 80013d6:	f7ff fce9 	bl	8000dac <GPIO_voidInitPin>
+ 8001420:	f107 0328 	add.w	r3, r7, #40	; 0x28
+ 8001424:	4618      	mov	r0, r3
+ 8001426:	f7ff fcc1 	bl	8000dac <GPIO_voidInitPin>
 	CAN_voidInit(CAN1, &rxCfg, &txCfg);
- 80013da:	f107 0224 	add.w	r2, r7, #36	; 0x24
- 80013de:	f107 0314 	add.w	r3, r7, #20
- 80013e2:	4619      	mov	r1, r3
- 80013e4:	4804      	ldr	r0, [pc, #16]	; (80013f8 <APP_voidCanInit+0xb8>)
- 80013e6:	f7fe ff17 	bl	8000218 <CAN_voidInit>
+ 800142a:	f107 0224 	add.w	r2, r7, #36	; 0x24
+ 800142e:	f107 0314 	add.w	r3, r7, #20
+ 8001432:	4619      	mov	r1, r3
+ 8001434:	4804      	ldr	r0, [pc, #16]	; (8001448 <APP_voidCanInit+0xb8>)
+ 8001436:	f7fe feef 	bl	8000218 <CAN_voidInit>
 }
- 80013ea:	bf00      	nop
- 80013ec:	373c      	adds	r7, #60	; 0x3c
- 80013ee:	46bd      	mov	sp, r7
- 80013f0:	bd90      	pop	{r4, r7, pc}
- 80013f2:	bf00      	nop
- 80013f4:	080014b4 	.word	0x080014b4
- 80013f8:	40006400 	.word	0x40006400
+ 800143a:	bf00      	nop
+ 800143c:	373c      	adds	r7, #60	; 0x3c
+ 800143e:	46bd      	mov	sp, r7
+ 8001440:	bd90      	pop	{r4, r7, pc}
+ 8001442:	bf00      	nop
+ 8001444:	08001504 	.word	0x08001504
+ 8001448:	40006400 	.word	0x40006400
 
-080013fc <Reset_Handler>:
+0800144c <Reset_Handler>:
 
   .section .text.Reset_Handler
   .weak Reset_Handler
   .type Reset_Handler, %function
 Reset_Handler:
   ldr   r0, =_estack
- 80013fc:	480d      	ldr	r0, [pc, #52]	; (8001434 <LoopForever+0x2>)
+ 800144c:	480d      	ldr	r0, [pc, #52]	; (8001484 <LoopForever+0x2>)
   mov   sp, r0          /* set stack pointer */
- 80013fe:	4685      	mov	sp, r0
+ 800144e:	4685      	mov	sp, r0
 /* Call the clock system initialization function.*/
   bl  SystemInit
- 8001400:	f3af 8000 	nop.w
+ 8001450:	f3af 8000 	nop.w
 
 /* Copy the data segment initializers from flash to SRAM */
   ldr r0, =_sdata
- 8001404:	480c      	ldr	r0, [pc, #48]	; (8001438 <LoopForever+0x6>)
+ 8001454:	480c      	ldr	r0, [pc, #48]	; (8001488 <LoopForever+0x6>)
   ldr r1, =_edata
- 8001406:	490d      	ldr	r1, [pc, #52]	; (800143c <LoopForever+0xa>)
+ 8001456:	490d      	ldr	r1, [pc, #52]	; (800148c <LoopForever+0xa>)
   ldr r2, =_sidata
- 8001408:	4a0d      	ldr	r2, [pc, #52]	; (8001440 <LoopForever+0xe>)
+ 8001458:	4a0d      	ldr	r2, [pc, #52]	; (8001490 <LoopForever+0xe>)
   movs r3, #0
- 800140a:	2300      	movs	r3, #0
+ 800145a:	2300      	movs	r3, #0
   b LoopCopyDataInit
- 800140c:	e002      	b.n	8001414 <LoopCopyDataInit>
+ 800145c:	e002      	b.n	8001464 <LoopCopyDataInit>
 
-0800140e <CopyDataInit>:
+0800145e <CopyDataInit>:
 
 CopyDataInit:
   ldr r4, [r2, r3]
- 800140e:	58d4      	ldr	r4, [r2, r3]
+ 800145e:	58d4      	ldr	r4, [r2, r3]
   str r4, [r0, r3]
- 8001410:	50c4      	str	r4, [r0, r3]
+ 8001460:	50c4      	str	r4, [r0, r3]
   adds r3, r3, #4
- 8001412:	3304      	adds	r3, #4
+ 8001462:	3304      	adds	r3, #4
 
-08001414 <LoopCopyDataInit>:
+08001464 <LoopCopyDataInit>:
 
 LoopCopyDataInit:
   adds r4, r0, r3
- 8001414:	18c4      	adds	r4, r0, r3
+ 8001464:	18c4      	adds	r4, r0, r3
   cmp r4, r1
- 8001416:	428c      	cmp	r4, r1
+ 8001466:	428c      	cmp	r4, r1
   bcc CopyDataInit
- 8001418:	d3f9      	bcc.n	800140e <CopyDataInit>
+ 8001468:	d3f9      	bcc.n	800145e <CopyDataInit>
 
 /* Zero fill the bss segment. */
   ldr r2, =_sbss
- 800141a:	4a0a      	ldr	r2, [pc, #40]	; (8001444 <LoopForever+0x12>)
+ 800146a:	4a0a      	ldr	r2, [pc, #40]	; (8001494 <LoopForever+0x12>)
   ldr r4, =_ebss
- 800141c:	4c0a      	ldr	r4, [pc, #40]	; (8001448 <LoopForever+0x16>)
+ 800146c:	4c0a      	ldr	r4, [pc, #40]	; (8001498 <LoopForever+0x16>)
   movs r3, #0
- 800141e:	2300      	movs	r3, #0
+ 800146e:	2300      	movs	r3, #0
   b LoopFillZerobss
- 8001420:	e001      	b.n	8001426 <LoopFillZerobss>
+ 8001470:	e001      	b.n	8001476 <LoopFillZerobss>
 
-08001422 <FillZerobss>:
+08001472 <FillZerobss>:
 
 FillZerobss:
   str  r3, [r2]
- 8001422:	6013      	str	r3, [r2, #0]
+ 8001472:	6013      	str	r3, [r2, #0]
   adds r2, r2, #4
- 8001424:	3204      	adds	r2, #4
+ 8001474:	3204      	adds	r2, #4
 
-08001426 <LoopFillZerobss>:
+08001476 <LoopFillZerobss>:
 
 LoopFillZerobss:
   cmp r2, r4
- 8001426:	42a2      	cmp	r2, r4
+ 8001476:	42a2      	cmp	r2, r4
   bcc FillZerobss
- 8001428:	d3fb      	bcc.n	8001422 <FillZerobss>
+ 8001478:	d3fb      	bcc.n	8001472 <FillZerobss>
 
 /* Call static constructors */
   bl __libc_init_array
- 800142a:	f000 f811 	bl	8001450 <__libc_init_array>
+ 800147a:	f000 f811 	bl	80014a0 <__libc_init_array>
 /* Call the application's entry point.*/
   bl main
- 800142e:	f7ff fda9 	bl	8000f84 <main>
+ 800147e:	f7ff fd81 	bl	8000f84 <main>
 
-08001432 <LoopForever>:
+08001482 <LoopForever>:
 
 LoopForever:
     b LoopForever
- 8001432:	e7fe      	b.n	8001432 <LoopForever>
+ 8001482:	e7fe      	b.n	8001482 <LoopForever>
   ldr   r0, =_estack
- 8001434:	20008000 	.word	0x20008000
+ 8001484:	20008000 	.word	0x20008000
   ldr r0, =_sdata
- 8001438:	20000000 	.word	0x20000000
+ 8001488:	20000000 	.word	0x20000000
   ldr r1, =_edata
- 800143c:	20000000 	.word	0x20000000
+ 800148c:	20000000 	.word	0x20000000
   ldr r2, =_sidata
- 8001440:	080014cc 	.word	0x080014cc
+ 8001490:	0800151c 	.word	0x0800151c
   ldr r2, =_sbss
- 8001444:	20000000 	.word	0x20000000
+ 8001494:	20000000 	.word	0x20000000
   ldr r4, =_ebss
- 8001448:	2000001c 	.word	0x2000001c
+ 8001498:	2000001c 	.word	0x2000001c
 
-0800144c <ADC1_2_IRQHandler>:
+0800149c <ADC1_2_IRQHandler>:
  * @retval : None
 */
   .section .text.Default_Handler,"ax",%progbits
 Default_Handler:
 Infinite_Loop:
   b Infinite_Loop
- 800144c:	e7fe      	b.n	800144c <ADC1_2_IRQHandler>
+ 800149c:	e7fe      	b.n	800149c <ADC1_2_IRQHandler>
 	...
 
-08001450 <__libc_init_array>:
- 8001450:	b570      	push	{r4, r5, r6, lr}
- 8001452:	4d0d      	ldr	r5, [pc, #52]	; (8001488 <__libc_init_array+0x38>)
- 8001454:	4c0d      	ldr	r4, [pc, #52]	; (800148c <__libc_init_array+0x3c>)
- 8001456:	1b64      	subs	r4, r4, r5
- 8001458:	10a4      	asrs	r4, r4, #2
- 800145a:	2600      	movs	r6, #0
- 800145c:	42a6      	cmp	r6, r4
- 800145e:	d109      	bne.n	8001474 <__libc_init_array+0x24>
- 8001460:	4d0b      	ldr	r5, [pc, #44]	; (8001490 <__libc_init_array+0x40>)
- 8001462:	4c0c      	ldr	r4, [pc, #48]	; (8001494 <__libc_init_array+0x44>)
- 8001464:	f000 f818 	bl	8001498 <_init>
- 8001468:	1b64      	subs	r4, r4, r5
- 800146a:	10a4      	asrs	r4, r4, #2
- 800146c:	2600      	movs	r6, #0
- 800146e:	42a6      	cmp	r6, r4
- 8001470:	d105      	bne.n	800147e <__libc_init_array+0x2e>
- 8001472:	bd70      	pop	{r4, r5, r6, pc}
- 8001474:	f855 3b04 	ldr.w	r3, [r5], #4
- 8001478:	4798      	blx	r3
- 800147a:	3601      	adds	r6, #1
- 800147c:	e7ee      	b.n	800145c <__libc_init_array+0xc>
- 800147e:	f855 3b04 	ldr.w	r3, [r5], #4
- 8001482:	4798      	blx	r3
- 8001484:	3601      	adds	r6, #1
- 8001486:	e7f2      	b.n	800146e <__libc_init_array+0x1e>
- 8001488:	080014c4 	.word	0x080014c4
- 800148c:	080014c4 	.word	0x080014c4
- 8001490:	080014c4 	.word	0x080014c4
- 8001494:	080014c8 	.word	0x080014c8
+080014a0 <__libc_init_array>:
+ 80014a0:	b570      	push	{r4, r5, r6, lr}
+ 80014a2:	4d0d      	ldr	r5, [pc, #52]	; (80014d8 <__libc_init_array+0x38>)
+ 80014a4:	4c0d      	ldr	r4, [pc, #52]	; (80014dc <__libc_init_array+0x3c>)
+ 80014a6:	1b64      	subs	r4, r4, r5
+ 80014a8:	10a4      	asrs	r4, r4, #2
+ 80014aa:	2600      	movs	r6, #0
+ 80014ac:	42a6      	cmp	r6, r4
+ 80014ae:	d109      	bne.n	80014c4 <__libc_init_array+0x24>
+ 80014b0:	4d0b      	ldr	r5, [pc, #44]	; (80014e0 <__libc_init_array+0x40>)
+ 80014b2:	4c0c      	ldr	r4, [pc, #48]	; (80014e4 <__libc_init_array+0x44>)
+ 80014b4:	f000 f818 	bl	80014e8 <_init>
+ 80014b8:	1b64      	subs	r4, r4, r5
+ 80014ba:	10a4      	asrs	r4, r4, #2
+ 80014bc:	2600      	movs	r6, #0
+ 80014be:	42a6      	cmp	r6, r4
+ 80014c0:	d105      	bne.n	80014ce <__libc_init_array+0x2e>
+ 80014c2:	bd70      	pop	{r4, r5, r6, pc}
+ 80014c4:	f855 3b04 	ldr.w	r3, [r5], #4
+ 80014c8:	4798      	blx	r3
+ 80014ca:	3601      	adds	r6, #1
+ 80014cc:	e7ee      	b.n	80014ac <__libc_init_array+0xc>
+ 80014ce:	f855 3b04 	ldr.w	r3, [r5], #4
+ 80014d2:	4798      	blx	r3
+ 80014d4:	3601      	adds	r6, #1
+ 80014d6:	e7f2      	b.n	80014be <__libc_init_array+0x1e>
+ 80014d8:	08001514 	.word	0x08001514
+ 80014dc:	08001514 	.word	0x08001514
+ 80014e0:	08001514 	.word	0x08001514
+ 80014e4:	08001518 	.word	0x08001518
 
-08001498 <_init>:
- 8001498:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
- 800149a:	bf00      	nop
- 800149c:	bcf8      	pop	{r3, r4, r5, r6, r7}
- 800149e:	bc08      	pop	{r3}
- 80014a0:	469e      	mov	lr, r3
- 80014a2:	4770      	bx	lr
+080014e8 <_init>:
+ 80014e8:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 80014ea:	bf00      	nop
+ 80014ec:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 80014ee:	bc08      	pop	{r3}
+ 80014f0:	469e      	mov	lr, r3
+ 80014f2:	4770      	bx	lr
 
-080014a4 <_fini>:
- 80014a4:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
- 80014a6:	bf00      	nop
- 80014a8:	bcf8      	pop	{r3, r4, r5, r6, r7}
- 80014aa:	bc08      	pop	{r3}
- 80014ac:	469e      	mov	lr, r3
- 80014ae:	4770      	bx	lr
+080014f4 <_fini>:
+ 80014f4:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 80014f6:	bf00      	nop
+ 80014f8:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 80014fa:	bc08      	pop	{r3}
+ 80014fc:	469e      	mov	lr, r3
+ 80014fe:	4770      	bx	lr
