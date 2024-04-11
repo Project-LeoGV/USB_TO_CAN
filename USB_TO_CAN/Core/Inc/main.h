@@ -31,7 +31,7 @@
 #include "../../MCAL/FDCAN/CAN_Interface.h"
 
 /* MACROS */
-#define CAN_IDS_COUNT		7 // To be edited later
+#define CAN_IDS_COUNT		13 // To be edited later
 
 typedef struct
 {

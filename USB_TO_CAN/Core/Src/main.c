@@ -18,19 +18,16 @@
 
 #include "main.h"
 
-#define CAN_DEBUG_USING_LED 	1
 
 /* Global Variables */
-u32 IDs[CAN_IDS_COUNT] = {0x01, 0x02, 0x003, 0x008, 0x009, 0x00A, 0x00F}; // Should Contain All UpStream IDs
+u32 IDs[CAN_IDS_COUNT] = {0x23, 0x29, 0x00, 0x01, 0x003, 0x005, 0x009, 0x014, 0x015, 0x016, 0x017, 0x018, 0x01c}; // Should Contain All UpStream IDs
 uint8_t buffer[14] = "0000000000000\n";
 
-#if CAN_DEBUG_USING_LED
 void delay(u32 ms)
 {
 	for(u32 i = 0; i < ms; i++)
 		for(u32 j = 0; j < 1080; j++);
 }
-#endif
 
 int main(void)
 {
@@ -48,6 +45,9 @@ int main(void)
 	receiveFrame.id = 0x00;
 
 	CAN_Frame_t transmitFrame;
+	transmitFrame.id = 0x000;
+	transmitFrame.rtr = CAN_FRAME_DATA;
+	transmitFrame.dlc = 8;
 	transmitFrame.ide = CAN_FRAME_STANDARD_ID;
 	transmitFrame.data[0] = 'W';
 	transmitFrame.data[1] = 'a';
@@ -56,34 +56,18 @@ int main(void)
 	transmitFrame.data[4] = 'U';
 	transmitFrame.data[5] = 'p';
 
-	USB_RX_t currentMessage, previousMessage;
-	previousMessage.msg_id = 0x000;
+	USB_RX_t currentMessage;
 	currentMessage.msg_id = 0x000;
 
 	u8 receivedMsgCount = 0;
-	u8 sameMsg;
-
-	transmitFrame.id = 0x000;
-	transmitFrame.rtr = CAN_FRAME_DATA;
-	transmitFrame.dlc = 8;
-
-#if CAN_DEBUG_USING_LED
-	delay(1000);
-	GPIO_voidSetPinValue(GPIO_PORTC, 13, 1);
-	delay(1000);
-#endif
-
 	//CAN_voidSendDataFrame(CAN1, &transmitFrame);
 	while(1)
 	{
 		// Receive from USB
 		APP_voidReceiveDataUSB(buffer, &currentMessage);
 
-		// Check if the message is new
-		sameMsg = APP_u8SameMessage(&previousMessage, &currentMessage);
-
 		// Send CAN Message
-		if(sameMsg == 0 && currentMessage.msg_id != 0x000)
+		if(currentMessage.msg_id != 0x000)
 		{
 			// Send CAN message
 			transmitFrame.id   = currentMessage.msg_id;
@@ -92,28 +76,16 @@ int main(void)
 			for(u8 i = 0; i < transmitFrame.dlc; i++)
 				transmitFrame.data[i] = currentMessage.data[i];
 
-/*
-#if CAN_DEBUG_USING_LED
-			for(u8 i = 0; i < currentMessage.dlc; i++)
-			{
-				if(currentMessage.data[i] == '5'){
-					GPIO_voidTogglePin(GPIO_PORTC, 13);
-					delay(100);
-				}
-			}
-#endif
-*/
-
 			CAN_voidSendDataFrame(CAN1, &transmitFrame);
 
 			// Update previous message
-			previousMessage.msg_id = currentMessage.msg_id;
-			previousMessage.rtr = currentMessage.rtr;
-			previousMessage.dlc = currentMessage.dlc;
-			for(u8 i = 0; i < currentMessage.dlc; i++)
-				previousMessage.data[i] = currentMessage.data[i];
+			buffer[0] = '0';
+			buffer[1] = '0';
+			buffer[2] = '0';
+			buffer[3] = '0';
 
 			delay(50);
+
 			// Check CAN Receive Buffer
 			receivedMsgCount = CAN_u8GetReceivedMessagesCount(CAN1, CAN_RX_FIFO0);
 
@@ -132,6 +104,7 @@ int main(void)
 		}
 
 		delay(50);
+
 		// Check CAN Receive Buffer
 		receivedMsgCount = CAN_u8GetReceivedMessagesCount(CAN1, CAN_RX_FIFO0);
 
