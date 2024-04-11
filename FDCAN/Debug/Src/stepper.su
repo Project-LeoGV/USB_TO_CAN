@@ -1,0 +1,5 @@
+../Src/stepper.c:19:5:main	48	static
+../Src/stepper.c:85:6:APP_voidSystemClockInit	8	static
+../Src/stepper.c:96:6:APP_voidGpioInit	16	static
+../Src/stepper.c:121:6:APP_voidCanInit	72	static
+../Src/stepper.c:146:6:delay	24	static

@@ -5,13 +5,13 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Src/mainRx.c 
+../Src/stepper.c 
 
 OBJS += \
-./Src/mainRx.o 
+./Src/stepper.o 
 
 C_DEPS += \
-./Src/mainRx.d 
+./Src/stepper.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -21,7 +21,7 @@ Src/%.o Src/%.su: ../Src/%.c Src/subdir.mk
 clean: clean-Src
 
 clean-Src:
-	-$(RM) ./Src/mainRx.d ./Src/mainRx.o ./Src/mainRx.su
+	-$(RM) ./Src/stepper.d ./Src/stepper.o ./Src/stepper.su
 
 .PHONY: clean-Src
 

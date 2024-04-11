@@ -9,20 +9,14 @@
 #include "../MCAL/GPIO/GPIO_Interface.h"
 #include "../MCAL/FDCAN/CAN_Interface.h"
 
+void APP_voidRccInit(void);
 void APP_voidGpioInit(void);
 void APP_voidCanInit(void);
 void delay(u32 ms);
 
 int main()
 {
-	RCC_voidInit();
-	RCC->CCIPR |= (1 << 25);
-
-	RCC_voidPeripheralClockEnable(RCC_AHB2, GPIO_A);
-	RCC_voidPeripheralClockEnable(RCC_AHB2, GPIO_B);
-	RCC_voidPeripheralClockEnable(RCC_AHB2, GPIO_C);
-	RCC_voidPeripheralClockEnable(RCC_APB1_1, FDCAN);
-
+	APP_voidRccInit();
 	APP_voidGpioInit();
 	APP_voidCanInit();
 
@@ -177,6 +171,17 @@ int main()
 
 		}
 	}
+}
+
+void APP_voidRccInit(void)
+{
+	RCC_voidInit();
+	RCC->CCIPR |= (1 << 25);
+
+	RCC_voidPeripheralClockEnable(RCC_AHB2, GPIO_A);
+	RCC_voidPeripheralClockEnable(RCC_AHB2, GPIO_B);
+	RCC_voidPeripheralClockEnable(RCC_AHB2, GPIO_C);
+	RCC_voidPeripheralClockEnable(RCC_APB1_1, FDCAN);
 }
 
 void APP_voidGpioInit(void)
